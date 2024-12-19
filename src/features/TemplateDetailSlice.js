@@ -79,6 +79,27 @@ export const getTemplateById = createAsyncThunk(
   }
 );
 
+export const searchTemplates = createAsyncThunk(
+  "searchTemplates",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}/Template/searchTemplates`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const templateDetails = createSlice({
   name: "templateDetails",
   initialState: {
@@ -116,7 +137,6 @@ export const templateDetails = createSlice({
       state.loading = true;
     },
     [createTemplateForHtml.fulfilled]: (state, action) => {
-      state.templates = state.templates.concat(action.payload.data);
       state.loading = false;
     },
     [createTemplateForHtml.rejected]: (state, action) => {

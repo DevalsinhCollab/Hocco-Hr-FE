@@ -146,7 +146,7 @@ const AddEmployee = ({ open, setOpen, callApi, operationMode, setOperationMode, 
         setOperationMode("add")
     };
 
-    const employeeFetchOptions = useMemo(
+    const companiesFetchOptions = useMemo(
         () =>
             _.debounce(async (query) => {
                 try {
@@ -168,7 +168,7 @@ const AddEmployee = ({ open, setOpen, callApi, operationMode, setOperationMode, 
     );
 
     useEffect(() => {
-        employeeFetchOptions(inputValue);
+        companiesFetchOptions(inputValue);
     }, [inputValue]);
 
     return (

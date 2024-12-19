@@ -54,7 +54,7 @@ export default function Employees(props) {
   const [status, setStatus] = useState({});
   const [signStatus, setSignStatus] = useState({});
   const [docAdded, setDocAdded] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
+  // const [selectedRows, setSelectedRows] = useState([]);
   const [signType, setSignType] = useState([false, null]);
   const [empInputValue, setEmpInputValue] = useState("");
   const [employee, setEmployee] = useState(null);
@@ -169,6 +169,7 @@ export default function Employees(props) {
     {
       field: "",
       headerName: "Actions",
+      headerClassName: 'red-header', 
       width: 200,
       renderCell: (params) => {
         return (
@@ -253,16 +254,19 @@ export default function Employees(props) {
     {
       field: "name",
       headerName: "Name",
+      headerClassName: 'red-header', 
       width: 250,
     },
     {
       field: "empCode",
       headerName: "Employee Code",
+      headerClassName: 'red-header', 
       width: 150,
     },
     {
       field: "email",
       headerName: "Email",
+      headerClassName: 'red-header', 
       width: 300,
     },
     // {
@@ -301,16 +305,19 @@ export default function Employees(props) {
     {
       field: "phone",
       headerName: "Phone",
+      headerClassName: 'red-header', 
       width: 150,
     },
     {
       field: "location",
       headerName: "Location",
+      headerClassName: 'red-header', 
       width: 200,
     },
     {
       field: "company",
       headerName: "Company Name",
+      headerClassName: 'red-header', 
       width: 250,
       renderCell: ({ row }) => {
         return row && row.company && row.company.name || ""
@@ -319,16 +326,19 @@ export default function Employees(props) {
     {
       field: "adhar",
       headerName: "Adhar",
+      headerClassName: 'red-header', 
       width: 150,
     },
     {
       field: "birth",
       headerName: "Birth",
+      headerClassName: 'red-header', 
       width: 150,
     },
     {
       field: "gender",
       headerName: "Gender",
+      headerClassName: 'red-header',
       width: 150,
     },
   ];
@@ -406,25 +416,25 @@ export default function Employees(props) {
     toast.success("Download Successfully!");
   };
 
-  const handleSendAgreementToAll = async () => {
-    toast.success("Sending agreements");
+  // const handleSendAgreementToAll = async () => {
+  //   toast.success("Sending agreements");
 
-    const response = await dispatch(
-      sendMultiAgreementsToEmps({ employees: selectedRows })
-    );
+  //   const response = await dispatch(
+  //     sendMultiAgreementsToEmps({ employees: selectedRows })
+  //   );
 
-    if (
-      response &&
-      response.type.includes("sendMultiAgreementsToEmps/fulfilled")
-    ) {
-      let empCodes = response.payload.data
-        .map((item) => item.empCode)
-        .join(", ");
-      toast.success(`Agreements sent to employee codes ${empCodes}`);
-    } else {
-      toast.error(response.payload.response.data.message);
-    }
-  };
+  //   if (
+  //     response &&
+  //     response.type.includes("sendMultiAgreementsToEmps/fulfilled")
+  //   ) {
+  //     let empCodes = response.payload.data
+  //       .map((item) => item.empCode)
+  //       .join(", ");
+  //     toast.success(`Agreements sent to employee codes ${empCodes}`);
+  //   } else {
+  //     toast.error(response.payload.response.data.message);
+  //   }
+  // };
 
   const handlePaginationModelChange = (model) => {
     setPage(model.page);
@@ -449,14 +459,14 @@ export default function Employees(props) {
             />
           </div>
           <div className="d-flex gap-2">
-            {selectedRows && selectedRows.length > 0 && (
+            {/* {selectedRows && selectedRows.length > 0 && (
               <LoadingButton
                 variant="contained"
                 onClick={() => handleSendAgreementToAll()}
               >
                 Send To All
               </LoadingButton>
-            )}
+            )} */}
 
             <Button
               variant="outlined"
@@ -603,10 +613,10 @@ export default function Employees(props) {
                     },
                   },
                 }}
-                checkboxSelection
-                onRowSelectionModelChange={(newSelection) => {
-                  setSelectedRows(newSelection);
-                }}
+                // checkboxSelection
+                // onRowSelectionModelChange={(newSelection) => {
+                //   setSelectedRows(newSelection);
+                // }}
                 onPageChange={(newPage) => setPage(newPage)}
                 onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                 onPaginationModelChange={handlePaginationModelChange}

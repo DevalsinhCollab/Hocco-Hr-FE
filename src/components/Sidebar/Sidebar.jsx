@@ -23,7 +23,6 @@ const Sidebar = (props) => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [open, setOpen] = useState(false);
 
-  // Hover state for each item in the sidebar
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const handleMouseEnter = (index) => {
@@ -69,20 +68,20 @@ const Sidebar = (props) => {
       </div>
 
       <List
-        sx={{ width: "100%", maxWidth: 360, bgcolor: "#d51245", color: "#fff" }}
+        sx={{ width: "100%", maxWidth: 360, color: "#fff" }}
         component="nav"
         aria-labelledby="nested-list-subheader"
       >
-        <ListItemButton onClick={handleClick}>
+        <ListItemButton onClick={handleClick} sx={{ bgcolor: "#d51245" }} className="company">
           <ListItemText primary="Companies" />
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
         <Collapse in={open} timeout="auto" unmountOnExit>
           {companies &&
             companies.map((item, index) => (
-              <List component="div" disablePadding onClick={() => handleGetCompany(item)} key={index}>
+              <List component="div" disablePadding onClick={() => handleGetCompany(item)} key={index} >
                 <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText primary={item.name} />
+                  <ListItemText primary={item.name} style={{ color: "black" }} className="companyList" />
                 </ListItemButton>
               </List>
             ))}
@@ -94,25 +93,21 @@ const Sidebar = (props) => {
           <li key={index} style={{ padding: isNavbarClose ? "0px 10px" : "0px 15px" }}>
             <Link
               to={item.link}
+              key={index}
               className={location.pathname === item.link ? "active" : ""}
               onClick={item.children ? () => handleParentClick(index) : undefined}
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
-              style={{ borderRadius: "999px", margin: "5px 0px" }}
+              style={{ margin: "5px 0px", display: "flex", padding: "0px 20px" }}
             >
-              <i
-                className={item.icon}
-                style={{
-                  color: location.pathname === item.link || hoveredIndex === index ? "#fff" : "black",
-                }}
-              ></i>
+              <img src={item.icon} style={{ marginRight: "1rem" }} />
 
               {!isNavbarClose &&
 
                 <span
                   className="links_name"
                   style={{
-                    color: location.pathname === item.link || hoveredIndex === index ? "#fff" : "black",
+                    color: location.pathname === item.link || hoveredIndex === index ? "#d61346" : "black",
                   }}
                 >
                   {t(item.title)}

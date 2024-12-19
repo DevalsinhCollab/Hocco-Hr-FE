@@ -10,31 +10,45 @@ import { useNavigate } from "react-router-dom";
 import JoditEditor from "jodit-react";
 
 // old
-import ReactQuill, { Quill } from "react-quill";
+import { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "quill-better-table/dist/quill-better-table.css";
 import QuillBetterTable from "quill-better-table";
 import { LoadingButton } from "@mui/lab";
+import SearchCompanyAutocomplete from "../../components/autocomplete/SearchCompanyAutocomplete";
 Quill.register("modules/better-table", QuillBetterTable);
 
 window.katex = katex;
 
 const AddTemplate = (props) => {
   const dispatch = useDispatch();
-  const [text, setText] = useState("");
-  const [templateName, setTemplateName] = useState("");
-  // const { loading: templateLoading } = useSelector(
-  //   (state) => state.templateData
-  // );
-
   const navigate = useNavigate();
   const editor = useRef(null);
+
+  const { loading } = useSelector((state) => state.templateData)
+
+  const [text, setText] = useState("");
+  const [templateName, setTemplateName] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const [company, setCompany] = useState(null)
 
   const handleChange = (html) => {
     setText(html);
   };
 
-  const _handleHTMLSubmitBtn = async () => {
+  const handleSubmit = async () => {
+    if (!company) {
+      return toast("Please select a company")
+    }
+
+    if (!templateName) {
+      return toast("Please enter template name")
+    }
+
+    if (!text) {
+      return toast("Please enter the template")
+    }
+
     const regex = /{([^{}]+)}/g;
 
     let matches = [];
@@ -67,6 +81,7 @@ const AddTemplate = (props) => {
       templateName,
       htmlTemplate: text,
       fields: matches,
+      company: company && company.value
     };
 
     const getData = await dispatch(createTemplateForHtml(finalData));
@@ -81,6 +96,8 @@ const AddTemplate = (props) => {
       <div className="teamMainBox">
         <div className="card m-3 p-3">
           <div className="mb-5 d-flex flex-column align-items-center justify-content-between">
+            <SearchCompanyAutocomplete inputValue={inputValue} setInputValue={setInputValue} setCompany={setCompany} />
+
             <TextField
               label="Enter Template Name"
               variant="outlined"
@@ -100,8 +117,8 @@ const AddTemplate = (props) => {
           </div>
           <LoadingButton
             variant="contained"
-            // loading={templateLoading}
-            onClick={_handleHTMLSubmitBtn}
+            loading={loading}
+            onClick={handleSubmit}
           >
             Submit
           </LoadingButton>

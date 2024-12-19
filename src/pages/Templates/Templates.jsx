@@ -14,8 +14,8 @@ export default function Templates(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
-//   const { error } = useSelector((state) => state.userData);
-//   const { templates } = useSelector((state) => state.templateData);
+  //   const { error } = useSelector((state) => state.userData);
+  const { templates } = useSelector((state) => state.templateData);
   const [newModal, setNewModal] = useState(false);
 
   useEffect(() => {
@@ -40,27 +40,6 @@ export default function Templates(props) {
       field: "templateName",
       headerName: "Template(s)",
       flex: 1,
-    },
-    {
-      field: "",
-      headerName: "Actions",
-      flex: 1,
-      renderCell: (params) => {
-        return (
-          <div className="d-flex gap-2">
-            {params && params.row && params.row.htmlTemplate ? (
-              <></>
-            ) : (
-              <Button
-                variant="outline-success"
-                onClick={() => openPDFFromBase64(params.row.mainTemplate)}
-              >
-                <RemoveRedEyeIcon />
-              </Button>
-            )}
-          </div>
-        );
-      },
     },
   ];
 
@@ -93,7 +72,7 @@ export default function Templates(props) {
             </div>
             <Box sx={{ height: "auto", width: "100%" }}>
               <DataGrid
-                rows={[]}
+                rows={templates}
                 columns={columns}
                 initialState={{
                   pagination: {

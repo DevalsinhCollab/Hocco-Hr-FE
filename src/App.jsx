@@ -35,7 +35,7 @@ function App() {
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
           {routesArray.map((item, index) => (
-            <Route path={item.link} element={<FullLayout Component={<item.component />} key={index} />} />
+            <Route path={item.link} element={<FullLayout Component={<item.component />} key={index} />} key={index} />
           ))}
         </Route>
       </Routes>

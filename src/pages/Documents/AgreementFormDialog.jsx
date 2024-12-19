@@ -21,6 +21,7 @@ import { Autocomplete, styled, TextField, Tooltip } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { sendAgreementToEmp } from "../../features/DocumentSlice";
 import { signTypeArray } from "../../utils/utils";
+import SearchTemplateAutocomplete from "../../components/autocomplete/SearchTemplateAutocomplete";
 
 export default function AgreementFormDialog(props) {
   const { modalOpen, setModalOpen, callApi: apiFunc } = props;
@@ -222,21 +223,23 @@ export default function AgreementFormDialog(props) {
             >
               <FormControl sx={{ minWidth: 200 }}>
                 <InputLabel htmlFor="max-width">Templates</InputLabel>
-                <Select
+                {/* <Select
                   name="template"
                   value={template}
                   label="Templates"
                   onChange={(e) => setTemplate(e.target.value)}
                   sx={{ borderRadius: "10px" }}
                 >
-                  {/* {templates.map((i) => {
+                  {templates.map((i) => {
                   return (
                     <MenuItem value={i?._id} key={i._id}>
                       {i?.templateName}
                     </MenuItem>
                   );
-                })} */}
-                </Select>
+                })}
+                </Select> */}
+
+                <SearchTemplateAutocomplete />
               </FormControl>
               <ul className="mt-3">
                 {findBase64 &&

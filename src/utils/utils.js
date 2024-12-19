@@ -222,4 +222,14 @@ export const titleArray = [
     title: "Documents",
     link: "/documents",
   },
+  {
+    id: generateRandomId(),
+    title: "Add Template",
+    link: "/templates/add",
+  },
+  {
+    id: generateRandomId(),
+    title: "Signed Documents",
+    link: "/signed",
+  },
 ];

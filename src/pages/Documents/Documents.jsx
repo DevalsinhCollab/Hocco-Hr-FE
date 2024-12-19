@@ -20,10 +20,15 @@ import CircleIcon from "@mui/icons-material/Circle";
 import AgreementFormDialog from "./AgreementFormDialog";
 import { Autocomplete, TextField } from "@mui/material";
 import SearchEmployeeAutocomplete from "../../components/autocomplete/SearchEmployeeAutocomplete";
+import { useLocation } from "react-router-dom";
 
 export default function Documents() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const location = useLocation()
+
+  console.log(location, "location=========");
+
 
   const { documents, totalCount } = useSelector(state => state.documentData)
 
@@ -47,7 +52,7 @@ export default function Documents() {
       getAllDocuments({
         page,
         pageSize,
-        signStatus: signStatus && signStatus.value || "",
+        signStatus: ["/signed"].includes(location.pathname) ? "Signed" : signStatus && signStatus.value || "",
         status: status && status.value || "",
         search: search || ""
       })
