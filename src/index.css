@@ -232,17 +232,19 @@ nav .profile-details i {
 }
 
 .home-content .overview-boxes {
+  width: 100%;
+  padding: 0 1rem;
   display: flex;
   gap: 1rem 1.5rem;
-  flex-wrap: wrap;
-  padding: 0 10px;
-  margin-bottom: 20px;
-  margin-left: 1rem;
-  width: 100%;
 }
 
 .home-content .overview-boxes .left-side {
-  width: 60%;
+  width: calc(100% - 30rem);
+}
+
+.home-content .overview-boxes .right-side {
+  width: 30rem;
+  border: 2px solid red;
 }
 
 .overview-boxes .left-side .upperDiv {
@@ -253,13 +255,13 @@ nav .profile-details i {
 }
 
 .overview-boxes .left-side .upperDiv .box {
+  width: 18rem;
   display: flex;
+  align-items: center;
   background: #fff;
-  padding: 1rem 0.6rem;
+  padding: 1rem;
+  border-radius: 8px;
   gap: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 0.5rem;
 }
 
 .overview-boxes .left-side .upperDiv .box .middleDiv {

@@ -6,13 +6,17 @@ const DashCard = (props) => {
 
   return (
     <Link to={link} className="text-decoration-none text-dark" key={index}>
-      <div className="box">
+      <div 
+        className="box"
+        style={{
+            border: `.13rem solid ${borderColor}`,
+          }}
+      >
         <img
           src={icon}
           style={{
-            marginBottom: "1rem",
-            borderRadius: "8px",
-            border: `3px solid ${borderColor}`,
+            borderRadius: "5px",
+            border: `.13rem solid ${borderColor}`,
             padding: "0.9rem",
             width: "57px",
             height: "57px",
