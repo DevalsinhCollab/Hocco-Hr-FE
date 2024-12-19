@@ -21,14 +21,12 @@ import AgreementFormDialog from "./AgreementFormDialog";
 import { Autocomplete, TextField } from "@mui/material";
 import SearchEmployeeAutocomplete from "../../components/autocomplete/SearchEmployeeAutocomplete";
 import { useLocation } from "react-router-dom";
+import { SignTypeOption } from "../../utils/utils";
 
 export default function Documents() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const location = useLocation()
-
-  console.log(location, "location=========");
-
 
   const { documents, totalCount } = useSelector(state => state.documentData)
 
@@ -41,27 +39,45 @@ export default function Documents() {
   const [employee, setEmployee] = useState(null);
   const [status, setStatus] = useState(null);
   const [signStatus, setSignStatus] = useState(null);
+  const [signType, setSignType] = useState(null);
 
   const handlePaginationModelChange = (model) => {
     setPage(model.page);
     setPageSize(model.pageSize);
   };
 
+  useEffect(() => {
+
+    if (["/signed"].includes(location.pathname)) {
+      setSignStatus({ label: "Signed", value: "Signed" })
+    }
+
+    if (["/unsigned"].includes(location.pathname)) {
+      setSignStatus({ label: "Unsigned", value: "Unsigned" })
+    }
+
+    if (["/completed"].includes(location.pathname)) {
+      setStatus({ label: "Completed", value: "Completed" })
+    }
+
+  }, [location])
+
   const callApi = () => {
     dispatch(
       getAllDocuments({
         page,
         pageSize,
-        signStatus: ["/signed"].includes(location.pathname) ? "Signed" : signStatus && signStatus.value || "",
+        signStatus: signStatus && signStatus.value || "",
         status: status && status.value || "",
-        search: search || ""
+        search: search || "",
+        signType: signType && signType.value || ""
       })
     );
   };
 
   useEffect(() => {
     callApi();
-  }, [page, pageSize, search, status, signStatus]);
+  }, [page, pageSize, search, status, signStatus, signType]);
 
   const openPdf = (url) => {
     if (url) {
@@ -75,6 +91,7 @@ export default function Documents() {
     {
       field: "",
       headerName: "Actions",
+      headerClassName: 'red-header',
       width: 100,
       renderCell: (params) => {
         return (
@@ -93,16 +110,19 @@ export default function Documents() {
       field: "empName",
       headerName: "Employee Name",
       width: 250,
+      headerClassName: 'red-header',
     },
     {
       field: "empCode",
       headerName: "Employee Code",
-      width: 150,
+      width: 220,
+      headerClassName: 'red-header',
     },
     {
       field: "signType",
       headerName: "Sign Type",
-      width: 150,
+      width: 200,
+      headerClassName: 'red-header',
       renderCell: ({ row }) => {
         return (
           <>
@@ -125,7 +145,8 @@ export default function Documents() {
     {
       field: "companyName",
       headerName: "Company Name",
-      width: 200,
+      width: 300,
+      headerClassName: 'red-header',
       renderCell: ({ row }) => {
         return row && row.company && row.company.name
       }
@@ -134,11 +155,13 @@ export default function Documents() {
       field: "status",
       headerName: "Status",
       width: 200,
+      headerClassName: 'red-header',
     },
     {
       field: "signStatus",
       headerName: "Sign Status",
       width: 200,
+      headerClassName: 'red-header',
     },
   ];
 
@@ -176,73 +199,79 @@ export default function Documents() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <div className="d-flex gap-2">
+          <div className="d-flex">
             <Button
               variant="outlined"
               onClick={() => setFilterOpen(!filterOpen)}
+              sx={{ marginRight: "1rem" }}
             >
               Filter
             </Button>
 
-            <Button
-              variant="contained"
-              sx={{ marginRight: "1rem" }}
-              onClick={handleAddDocuments}
-            >
-              Add Document
-            </Button>
+            {["/documents"].includes(location.pathname) &&
+              <Button
+                variant="contained"
+                sx={{ marginRight: "1rem" }}
+                onClick={handleAddDocuments}
+              >
+                Add Document
+              </Button>
+            }
           </div>
         </div>
 
         {filterOpen && (
-          <div className="teamMainBox">
-            <Box className="card m-3 p-3 mb-3 d-flex justify-content-between">
-              <div className="d-flex gap-4">
-                <SearchEmployeeAutocomplete
-                  label={"Name"}
-                  inputValue={empInputValue}
-                  setInputValue={setEmpInputValue}
-                  employee={employee}
-                  setEmployee={setEmployee}
-                />
+          <Box className="card m-3 p-3 mb-3 d-flex justify-content-between" sx={{ background: "#ffe7eb" }}>
+            <div className="d-flex gap-4">
+              <SearchEmployeeAutocomplete
+                label={"Name"}
+                inputValue={empInputValue}
+                setInputValue={setEmpInputValue}
+                employee={employee}
+                setEmployee={setEmployee}
+              />
 
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={statusOption}
-                  sx={{ width: 300 }}
-                  onChange={(e, newValue) => setStatus(newValue)}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Status" />
-                  )}
-                />
+              {["/documents"].includes(location.pathname) &&
+                <>
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={statusOption}
+                    sx={{ width: 300, background: "#fff" }}
+                    onChange={(e, newValue) => setStatus(newValue)}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Status" />
+                    )}
+                  />
 
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={signStatusOption}
-                  sx={{ width: 300 }}
-                  onChange={(e, newValue) => setSignStatus(newValue)}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Sign Status" />
-                  )}
-                />
-              </div>
-            </Box>
-          </div>
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={signStatusOption}
+                    sx={{ width: 300, background: "#fff" }}
+                    onChange={(e, newValue) => setSignStatus(newValue)}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Sign Status" />
+                    )}
+                  /></>
+              }
+
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={SignTypeOption}
+                sx={{ width: 300, background: "#fff" }}
+                onChange={(e, newValue) => setSignType(newValue)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Sign Type" />
+                )}
+              />
+            </div>
+          </Box>
         )}
 
         <div className="teamMainBox">
-          <div className="card m-3 p-3">
-            <div className="mb-3 d-flex align-items-center align-items-center justify-content-between">
-              <h4 className="m-0">{t("Documents")}</h4>
-              {/* <LoadingButton
-                variant="outlined"
-                onClick={handlePdfCheck}
-              >
-                Refresh
-              </LoadingButton> */}
-            </div>
+          <div className="card m-3">
             <Box sx={{ height: "auto", width: "100%" }}>
               <DataGrid
                 rows={documents}

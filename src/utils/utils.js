@@ -232,4 +232,19 @@ export const titleArray = [
     title: "Signed Documents",
     link: "/signed",
   },
+  {
+    id: generateRandomId(),
+    title: "Unsigned Documents",
+    link: "/unsigned",
+  },
+  {
+    id: generateRandomId(),
+    title: "Completed Documents",
+    link: "/completed",
+  },
 ];
+
+export const SignTypeOption = [
+  { label: "Adhar", value: "adhar" },
+  { label: "Dsc", value: "dsc" }
+]

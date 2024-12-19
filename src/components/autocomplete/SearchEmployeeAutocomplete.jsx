@@ -20,13 +20,13 @@ const SearchEmployeeAutocomplete = (props) => {
 
           setEmployeeOptions(
             response &&
-              response.payload &&
-              response.payload.data.map((item) => ({
-                label: `${item?.empCode} - ${item?.name}`,
-                empCode: item?.empCode,
-                empName: item.name,
-                value: item?._id,
-              }))
+            response.payload &&
+            response.payload.data.map((item) => ({
+              label: `${item?.empCode} - ${item?.name}`,
+              empCode: item?.empCode,
+              empName: item.name,
+              value: item?._id,
+            }))
           );
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -45,7 +45,7 @@ const SearchEmployeeAutocomplete = (props) => {
         disablePortal
         id="combo-box-demo"
         options={employeeOptions}
-        sx={{ width: width ? width : 300, ...sx }}
+        sx={{ width: width ? width : 300, ...sx, background: "#fff" }}
         value={employee}
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);

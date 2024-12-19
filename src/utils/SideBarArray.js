@@ -45,12 +45,6 @@ export const sideBarArray = [
   },
   {
     id: generateRandomId(),
-    title: "In Progress",
-    link: "/inProgress",
-    icon: DocumentIcon,
-  },
-  {
-    id: generateRandomId(),
     title: "Completed",
     link: "/completed",
     icon: DocumentIcon,

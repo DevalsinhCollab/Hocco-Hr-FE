@@ -113,11 +113,6 @@ const Sidebar = (props) => {
                   {t(item.title)}
                 </span>
               }
-              {item.children && (
-                <i
-                  className={`bx bx-chevron-${activeMenu === index ? "up" : "down"}`}
-                ></i>
-              )}
             </Link>
           </li>
         ))}
