@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { getTokenFromLocalStorage } from "../common";
 
 export const createTemplate = createAsyncThunk(
   "createTemplate",
@@ -23,7 +24,13 @@ export const getTemplates = createAsyncThunk(
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_API}/Template/getTemplates`,
-        data
+        {
+          params: data,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+          },
+        }
       );
 
       return response.data;
@@ -70,7 +77,7 @@ export const getTemplateById = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_API}/Template/getTemplateById/${data}`
+        `${import.meta.env.VITE_BACKEND_API}/Template/getTemplateById/${data.id}`
       );
       return response.data;
     } catch (error) {
@@ -100,10 +107,26 @@ export const searchTemplates = createAsyncThunk(
   }
 );
 
+export const updateTemplate = createAsyncThunk(
+  "updateTemplate",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_API}/Template/updateTemplate/${data.id}`,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const templateDetails = createSlice({
   name: "templateDetails",
   initialState: {
     templates: [],
+    totalCount: 0,
     loading: false,
     error: null,
   },
@@ -126,6 +149,7 @@ export const templateDetails = createSlice({
     },
     [getTemplates.fulfilled]: (state, action) => {
       state.templates = action.payload.data;
+      state.totalCount = action.payload.total;
       state.loading = false;
     },
     [getTemplates.rejected]: (state, action) => {

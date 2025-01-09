@@ -29,11 +29,7 @@ export default function AgreementFormDialog(props) {
 
   const { loading: docLoading } = useSelector(state => state.documentData)
 
-  const [template, setTemplate] = useState("");
   const [radioText, setRadioText] = useState("agreement");
-  const [findBase64, setFindBase64] = useState(null);
-  const [callApi, setCallApi] = useState(false);
-  const [assetsData, setAssetsData] = useState({});
   const [empInputValue, setEmpInputValue] = useState("");
   const [employee, setEmployee] = useState(null);
   const [document, setDocument] = useState("");
@@ -41,57 +37,22 @@ export default function AgreementFormDialog(props) {
   const [signType, setSignType] = useState(null);
 
   useEffect(() => {
-    if (template !== "") {
-      setCallApi(true);
-    }
-  }, [template]);
-
-  const callAssetApi = async () => {
-    const response = await dispatch(
-      // getDFByAssetSerialNumber({
-      //   assetSerialNumber: modalOpen[1].assetSerialNumber,
-      // })
-    );
-
-    if (response && response.payload && response.payload.data) {
-      setAssetsData(response.payload.data);
-    }
-  };
-
-  useEffect(() => {
-    if (callApi) {
-      callAssetApi();
-    }
-  }, [callApi]);
-
-  useEffect(() => {
     dispatch(getTemplates());
   }, []);
 
   const getEmpData = () => {
-    if (assetsData) {
-      var { custName, custCode, ...updatedAssetsData } = assetsData;
+    if (employee) {
+      var { label, value, ...updatedEmployeeData } = employee;
     }
 
-    let combineObject = { ...updatedAssetsData };
-
-    let { _id, __v, ...newObj } = combineObject;
-
-    return {
-      ...newObj,
-      Execution_Date: "Agreement generation Date",
-      Legal_Entity: "Proprietor/ partnership",
-      CIN: "",
-      FSSAI_License: "",
-    };
+    return updatedEmployeeData
   };
 
   const handleClose = () => {
     setModalOpen(false);
-    setTemplate("");
-    setFindBase64(null);
-    setCallApi(false);
     setEmployee(null)
+    setSignType(null)
+    setDocument("")
   };
 
   const VisuallyHiddenInput = styled("input")({
@@ -143,7 +104,8 @@ export default function AgreementFormDialog(props) {
       empName: employee && employee.empName,
       document: document,
       fileName: fileName,
-      signType: signType.value
+      signType: signType.value,
+      radioText: radioText
     }
 
     const response = await dispatch(sendAgreementToEmp(finalData))
@@ -153,12 +115,12 @@ export default function AgreementFormDialog(props) {
     }
 
     apiFunc()
-    setModalOpen(false)
+    handleClose()
   };
 
   return (
     <>
-      <Dialog open={modalOpen} onClose={() => handleClose()} fullWidth>
+      <Dialog open={modalOpen} onClose={handleClose} fullWidth>
         <DialogTitle
           sx={{
             display: "flex",
@@ -223,56 +185,21 @@ export default function AgreementFormDialog(props) {
             >
               <FormControl sx={{ minWidth: 200 }}>
                 <InputLabel htmlFor="max-width">Templates</InputLabel>
-                {/* <Select
-                  name="template"
-                  value={template}
-                  label="Templates"
-                  onChange={(e) => setTemplate(e.target.value)}
-                  sx={{ borderRadius: "10px" }}
-                >
-                  {templates.map((i) => {
-                  return (
-                    <MenuItem value={i?._id} key={i._id}>
-                      {i?.templateName}
-                    </MenuItem>
-                  );
-                })}
-                </Select> */}
-
-                <SearchTemplateAutocomplete />
+                <SearchTemplateAutocomplete label="Templates" document={document} setDocument={setDocument} />
               </FormControl>
               <ul className="mt-3">
-                {findBase64 &&
-                  findBase64?.fields.map((field, i) => {
+                {employee !== null && document &&
+                  document.fields && document.fields.map((field, i) => {
                     let showData = "";
                     showData = getEmpData();
 
-                    const replacementMap = {
-                      "{Dealer_Name}": "{name}",
-                      "{Dealer_Code}": "{empCode}",
-                    };
-
-                    let dbKey = replacementMap[field];
-
-                    // if (dbKey == "{Execution_Date}") {
-                    //   const myDate = new Date();
-                    //   const formattedDate = myDate.toLocaleString("en-US", {
-                    //     year: "numeric",
-                    //     month: "2-digit",
-                    //     day: "2-digit",
-                    //   });
-                    //   return (
-                    //     <li>
-                    //       {field} = {formattedDate}
-                    //     </li>
-                    //   );
-                    // }
+                    let dbKey = field
 
                     if (dbKey) {
                       let rbDBKey = dbKey.replace("{", "").replace("}", "");
                       return (
                         <li>
-                          {field} = {showData[rbDBKey] ? showData[rbDBKey] : ""}
+                          {field} = {showData && showData[rbDBKey] ? showData[rbDBKey] : ""}
                         </li>
                       );
                     } else {
@@ -314,7 +241,7 @@ export default function AgreementFormDialog(props) {
             Send
           </LoadingButton>
 
-          <Button onClick={() => handleClose()}>Close</Button>
+          <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
     </>

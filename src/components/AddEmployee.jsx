@@ -4,11 +4,12 @@ import Form from "react-bootstrap/Form";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Autocomplete, LoadingButton } from "@mui/lab";
-import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
+import { Box, FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, styled, TextField } from "@mui/material";
 import { getCompanies } from "../features/CompanyDetailSlice";
 import _ from "lodash";
-import { createEmployee, getEmployeesById, updateEmployee } from "../features/EmployeeDetailSlice";
+import { createEmployee, getEmployeeById, updateEmployee } from "../features/EmployeeDetailSlice";
 import { toast } from "react-toastify";
+import Paper from '@mui/material/Paper';
 
 const AddEmployee = ({ open, setOpen, callApi, operationMode, setOperationMode, employeeId }) => {
     const dispatch = useDispatch();
@@ -46,11 +47,9 @@ const AddEmployee = ({ open, setOpen, callApi, operationMode, setOperationMode, 
 
     useEffect(() => {
         const callEmployee = async () => {
-            let response = await dispatch(getEmployeesById({ id: employeeId }))
+            let response = await dispatch(getEmployeeById({ id: employeeId }))
 
-            console.log(response.payload.data.cc, "response.payload.data.cc==========")
-
-            if (response && response.type == "getEmployeesById/fulfilled") {
+            if (response && response.type == "getEmployeeById/fulfilled") {
                 setFormData({
                     name: response && response.payload && response.payload.data && response.payload.data.name,
                     empCode: response && response.payload && response.payload.data && response.payload.data.empCode,
@@ -171,138 +170,171 @@ const AddEmployee = ({ open, setOpen, callApi, operationMode, setOperationMode, 
         companiesFetchOptions(inputValue);
     }, [inputValue]);
 
+
     return (
         <>
-            <Modal show={open} onHide={handleClose}>
-                <Modal.Header closeButton>
+            <Modal show={open} onHide={handleClose} size="xl">
+                <Modal.Header style={{ background: "#d51245", color: "#ffffff", display: "flex", justifyContent: "space-between" }}>
                     <Modal.Title>{operationMode == "add" ? "Add" : "Edit"} Employee</Modal.Title>
+                    <Modal.Title onClick={handleClose} style={{ cursor: "pointer" }}>X</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group>
-                            <Form.Label className="mt-2">Company</Form.Label>
-                            <Autocomplete
-                                disablePortal
-                                value={company}
-                                options={companyOptions}
-                                renderInput={(params) => <TextField {...params} />}
-                                size="small"
-                                onInputChange={(event, newInputValue) => {
-                                    setInputValue(newInputValue);
-                                }}
-                                onChange={(e, newValue) => {
-                                    if (newValue) {
-                                        setCompany(newValue);
-                                    } else {
-                                        setCompany(null);
-                                    }
-                                }}
-                            />
-                        </Form.Group>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={6}>
+                                <Form.Group>
+                                    <Form.Label className="mt-2">Company</Form.Label>
+                                    <Autocomplete
+                                        disablePortal
+                                        value={company}
+                                        options={companyOptions}
+                                        renderInput={(params) => <TextField {...params} />}
+                                        size="small"
+                                        onInputChange={(event, newInputValue) => {
+                                            setInputValue(newInputValue);
+                                        }}
+                                        onChange={(e, newValue) => {
+                                            if (newValue) {
+                                                setCompany(newValue);
+                                            } else {
+                                                setCompany(null);
+                                            }
+                                        }}
+                                    />
+                                </Form.Group>
 
-                        <Form.Group>
-                            <Form.Label className="mt-2">Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
+                                <Form.Group>
+                                    <Form.Label className="mt-2">Name</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
 
-                        <Form.Group>
-                            <Form.Label className="mt-2">Employee Code</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="empCode"
-                                value={formData.empCode}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
 
-                        <Form.Group>
-                            <Form.Label className="mt-2">Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
+                                <Form.Group>
+                                    <Form.Label className="mt-2">Employee Code</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="empCode"
+                                        value={formData.empCode}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
 
-                        <Form.Group>
-                            <Form.Label className="mt-2">CC</Form.Label>
-                            <Autocomplete
-                                id="free-solo-demo"
-                                freeSolo
-                                multiple
-                                options={[]}
-                                size="small"
-                                value={cc}
-                                onChange={(e, newValue) => {
-                                    if (newValue) {
-                                        setCC(newValue);
-                                    } else {
-                                        setCC([]);
-                                    }
-                                }}
-                                renderInput={(params) => <TextField {...params} />}
-                            />
-                        </Form.Group>
+                                <Form.Group>
+                                    <Form.Label className="mt-2">Email</Form.Label>
+                                    <Form.Control
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
 
-                        <Form.Group>
-                            <Form.Label className="mt-2">Phone</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
+                                <Form.Group>
+                                    <Form.Label className="mt-2">CC</Form.Label>
+                                    <Autocomplete
+                                        id="free-solo-demo"
+                                        freeSolo
+                                        multiple
+                                        options={[]}
+                                        size="small"
+                                        value={cc}
+                                        onChange={(e, newValue) => {
+                                            if (newValue) {
+                                                setCC(newValue);
+                                            } else {
+                                                setCC([]);
+                                            }
+                                        }}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </Form.Group>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Form.Group>
+                                    <Form.Label className="mt-2">Phone</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
 
-                        <Form.Group>
-                            <Form.Label className="mt-2">Location</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="location"
-                                value={formData.location}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
+                                <Form.Group>
+                                    <Form.Label className="mt-2">Location</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="location"
+                                        value={formData.location}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
 
-                        <Form.Group>
-                            <Form.Label className="mt-2">Adhar (Last 4 Digit)</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="adhar"
-                                value={formData.adhar}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
+                                <Form.Group>
+                                    <Form.Label className="mt-2">Adhar (Last 4 Digit)</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name="adhar"
+                                        value={formData.adhar}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
 
-                        <Form.Group>
-                            <Form.Label className="mt-2">Birth Year</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="birth"
-                                value={formData.birth}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
+                                <Form.Group>
+                                    <Form.Label className="mt-2">Birth Year</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name="birth"
+                                        value={formData.birth}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
 
-                        <FormControl>
-                            <Form.Label className="mt-2">Gender</Form.Label>
-                            <RadioGroup
-                                name="gender"
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                sx={{ display: "flex", flexDirection: "row" }}
-                                onChange={handleChange}
-                                value={formData.gender}
-                            >
-                                <FormControlLabel value="Male" control={<Radio />} label="Male" />
-                                <FormControlLabel value="Female" control={<Radio />} label="Female" />
-                            </RadioGroup>
-                        </FormControl>
+                                <FormControl>
+                                    <Form.Label className="mt-2">Gender</Form.Label>
+                                    <RadioGroup
+                                        name="gender"
+                                        aria-labelledby="demo-radio-buttons-group-label"
+                                        sx={{ display: "flex", flexDirection: "row" }}
+                                        onChange={handleChange}
+                                        value={formData.gender}
+                                    >
+                                        <FormControlLabel
+                                            value="Male"
+                                            control={
+                                                <Radio
+                                                    sx={{
+                                                        "&.Mui-checked": {
+                                                            color: "black",
+                                                        },
+                                                    }}
+                                                />
+                                            }
+                                            label="Male"
+                                        />
+                                        <FormControlLabel
+                                            value="Female"
+                                            control={
+                                                <Radio
+                                                    sx={{
+                                                        "&.Mui-checked": {
+                                                            color: "black",
+                                                        },
+                                                    }}
+                                                />
+                                            }
+                                            label="Female"
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+
+                            </Grid>
+                        </Grid>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -313,7 +345,7 @@ const AddEmployee = ({ open, setOpen, callApi, operationMode, setOperationMode, 
                         variant="contained"
                         onClick={handleSubmit}
                     >
-                        Save Changes
+                        Save
                     </LoadingButton>
                 </Modal.Footer>
             </Modal>

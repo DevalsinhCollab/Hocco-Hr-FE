@@ -4,8 +4,8 @@ import { Dropdown } from "react-bootstrap";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import TranslateIcon from "@mui/icons-material/Translate";
 import { titleArray } from "../../utils/utils";
+import LanguageIcon from "../../../public/Images/language.png"
 
 const Navbar = (props) => {
   const { toggleNavbar } = props;
@@ -34,30 +34,30 @@ const Navbar = (props) => {
     navigate("/login");
   };
 
-  useEffect(() => {
-    let mainTitle = titleArray.find((item) => item.link == location.pathname).title
-    setTitle(mainTitle)
-  }, [location])
+  // useEffect(() => {
+  //   let mainTitle = titleArray.find((item) => location.pathname.includes(item.link)).title
+  //   setTitle(mainTitle)
+  // }, [location])
 
   return (
     <nav>
       <div className="sidebar-button" onClick={toggleNavbar}>
         <i className="bx bx-menu sidebarBtn"></i>
-        <span className="dashboard">{t(title)}</span>
+        {/* <span className="dashboard">{t(title)}</span> */}
       </div>
 
       <Dropdown className="d-flex align-items-center gap-3">
         <Dropdown>
           <Dropdown.Toggle
             style={{
-              backgroundColor: "white",
+              backgroundColor: "#f1f1f1",
               border: "2px solid #efeef1",
-              borderRadius: "6px",
+              borderRadius: "9999px",
             }}
           >
-            <TranslateIcon style={{ color: "black" }} />
-            <i className="bx bx-chevron-down"></i>
-            <span className="text-dark ">
+            <img src={LanguageIcon}  />
+
+            <span className="text-dark" style={{marginLeft: "0.3rem"}}>
               {localStorage.getItem("language")
                 ? localStorage.getItem("language").toUpperCase()
                 : "EN"}
@@ -82,24 +82,17 @@ const Navbar = (props) => {
         </Dropdown>
         <Dropdown.Toggle
           id="dropdown-basic"
-          className="profile-details d-flex justify-content-between"
+          className="profile-details"
         >
           <img
             src={imageSrc !== null ? imageSrc : "./Images/user.jpg"}
             alt="User"
+            style={{borderRadius: "999pc"}}
           />
           <span className="admin_name">{auth && auth.name}</span>
           <i className="bx bx-chevron-down"></i>
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item href="#">
-            <Link
-              to={"/setprofile"}
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <div>Profile</div>
-            </Link>
-          </Dropdown.Item>
           <Dropdown.Item href="#" onClick={_handleLogoutBtn}>Logout</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

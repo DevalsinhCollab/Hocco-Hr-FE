@@ -5,7 +5,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import { getCompanies } from "../../features/CompanyDetailSlice";
 
 const SearchCompanyAutocomplete = (props) => {
-    const { inputValue, setInputValue, setCompany } =
+    const { inputValue, setInputValue, company, setCompany } =
         props;
 
     const dispatch = useDispatch();
@@ -44,6 +44,7 @@ const SearchCompanyAutocomplete = (props) => {
                 id="combo-box-demo"
                 options={companyOptions}
                 fullWidth
+                value={company}
                 onInputChange={(event, newInputValue) => {
                   setInputValue(newInputValue);
                 }}

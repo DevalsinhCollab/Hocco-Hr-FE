@@ -3,6 +3,8 @@ import Employees from "../pages/Employees/Employees";
 import Documents from "../pages/Documents/Documents";
 import Templates from "../pages/Templates/Templates";
 import AddTemplate from "../pages/Templates/AddTemplate";
+import EmployeeForm from "../pages/Employees/EmployeeForm";
+import PDFSigner from "../pages/PdfSigner";
 
 function generateRandomId(length = 2) {
   return Math.random().toString(36).substr(2, length);
@@ -11,7 +13,7 @@ function generateRandomId(length = 2) {
 export const routesArray = [
   {
     id: generateRandomId(),
-    link: "/",
+    link: "/dashboard",
     component: DashboardScreen,
   },
   {
@@ -27,6 +29,11 @@ export const routesArray = [
   {
     id: generateRandomId(),
     link: "/templates/add",
+    component: AddTemplate,
+  },
+  {
+    id: generateRandomId(),
+    link: "/templates/edit/:id",
     component: AddTemplate,
   },
   {
@@ -48,5 +55,15 @@ export const routesArray = [
     id: generateRandomId(),
     link: "/completed",
     component: Documents,
+  },
+  {
+    id: generateRandomId(),
+    link: "/employee/add",
+    component: EmployeeForm,
+  },
+  {
+    id: generateRandomId(),
+    link: "/employee/edit/:id",
+    component: EmployeeForm,
   },
 ];

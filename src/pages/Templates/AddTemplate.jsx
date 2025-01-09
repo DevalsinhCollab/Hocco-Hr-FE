@@ -1,11 +1,11 @@
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
-import { createTemplateForHtml } from "../../features/TemplateDetailSlice";
+import { createTemplateForHtml, getTemplateById, updateTemplate } from "../../features/TemplateDetailSlice";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import JoditEditor from "jodit-react";
 
@@ -16,6 +16,7 @@ import "quill-better-table/dist/quill-better-table.css";
 import QuillBetterTable from "quill-better-table";
 import { LoadingButton } from "@mui/lab";
 import SearchCompanyAutocomplete from "../../components/autocomplete/SearchCompanyAutocomplete";
+import _ from "lodash";
 Quill.register("modules/better-table", QuillBetterTable);
 
 window.katex = katex;
@@ -24,6 +25,8 @@ const AddTemplate = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const editor = useRef(null);
+  const currentLocation = useLocation()
+  const { id: templateId } = useParams()
 
   const { loading } = useSelector((state) => state.templateData)
 
@@ -32,9 +35,12 @@ const AddTemplate = (props) => {
   const [inputValue, setInputValue] = useState("");
   const [company, setCompany] = useState(null)
 
-  const handleChange = (html) => {
-    setText(html);
-  };
+  const handleChange = useCallback(
+    _.debounce((newContent) => {
+      setText(newContent);
+    }, 2000), // Adjust the debounce time as needed
+    []
+  );
 
   const handleSubmit = async () => {
     if (!company) {
@@ -58,25 +64,6 @@ const AddTemplate = (props) => {
       matches.push(match.input.substring(match.index, regex.lastIndex));
     }
 
-    const replacementMap = {
-      "{Dealer_Name}": "{custName}",
-      "{Address}": "{custAddress}",
-      "{GSTN}": "{gst}",
-      "{Adhar_Number}": "{adhar}",
-      "{Model}": "{materialDescriptionVendor}",
-      "{Barcode_No}": "{barCode}",
-      "{Deposit_Rs}": "{depositAmount}",
-      "{Machine_Deployment}": "{installationDate}",
-      "{Payment_Ref_Number}": "{paymentRefNoInCaseOfOnlinePay}",
-      "{Cheque_No_}": "{chequeNumberInCaseOfChequePay}",
-      "{Cheque_Date_}": "{chequeDateInCaseOfChequePay}",
-      "{Bank_Name}": "{chequeBankInCaseOfChequePay}",
-    };
-
-    matches = matches.map((element) =>
-      replacementMap[element] !== undefined ? replacementMap[element] : element
-    );
-
     let finalData = {
       templateName,
       htmlTemplate: text,
@@ -84,19 +71,36 @@ const AddTemplate = (props) => {
       company: company && company.value
     };
 
-    const getData = await dispatch(createTemplateForHtml(finalData));
+    const getData = await dispatch(currentLocation.pathname.includes("add") ? createTemplateForHtml(finalData) : updateTemplate({ ...finalData, id: templateId }));
+
     if (getData.type.includes("fulfilled")) {
       toast.success("Template Created Successfully");
       navigate("/templates");
     }
   };
 
+  useEffect(() => {
+    const callTemplate = async () => {
+      let response = await dispatch(getTemplateById({ id: templateId }))
+
+      if (response && response.type == "getTemplateById/fulfilled") {
+        setCompany({ label: response.payload.data.company.name, value: response.payload.data.company._id })
+        setTemplateName(response.payload.data.templateName)
+        setText(response.payload.data.htmlTemplate)
+      }
+    }
+
+    if (currentLocation.pathname.includes("edit")) {
+      callTemplate()
+    }
+  }, [currentLocation, templateId])
+
   return (
     <div className="home-content">
       <div className="teamMainBox">
         <div className="card m-3 p-3">
           <div className="mb-5 d-flex flex-column align-items-center justify-content-between">
-            <SearchCompanyAutocomplete inputValue={inputValue} setInputValue={setInputValue} setCompany={setCompany} />
+            <SearchCompanyAutocomplete inputValue={inputValue} setInputValue={setInputValue} company={company} setCompany={setCompany} />
 
             <TextField
               label="Enter Template Name"
@@ -111,7 +115,7 @@ const AddTemplate = (props) => {
                 ref={editor}
                 value={text}
                 tabIndex={1}
-                onChange={handleChange}
+                onChange={(newContent) => handleChange(newContent)}
               />
             </div>
           </div>

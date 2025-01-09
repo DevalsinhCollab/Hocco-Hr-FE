@@ -5,12 +5,12 @@ import { Autocomplete, TextField } from "@mui/material";
 import { searchTemplates } from "../../features/TemplateDetailSlice";
 
 const SearchTemplateAutocomplete = (props) => {
-  const { inputValue, setInputValue, setEmployee, employee, label, width, sx } =
-    props;
+  const { setDocument, document, label } = props;
 
   const dispatch = useDispatch();
 
   const [templateOptions, setTemplateOptions] = useState([]);
+  const [inputValue, setInputValue] = useState("");
 
   const templateFetchOptions = useMemo(
     () =>
@@ -20,11 +20,13 @@ const SearchTemplateAutocomplete = (props) => {
 
           setTemplateOptions(
             response &&
-              response.payload &&
-              response.payload.data.map((item) => ({
-                label: item.templateName,
-                value: item?._id,
-              }))
+            response.payload &&
+            response.payload.data.map((item) => ({
+              label: item.templateName,
+              fields: item.fields,
+              htmlTemplate: item.htmlTemplate,
+              value: item?._id,
+            }))
           );
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -41,19 +43,19 @@ const SearchTemplateAutocomplete = (props) => {
     <>
       <Autocomplete
         disablePortal
-        id="combo-box-demo"
         options={templateOptions}
         fullWidth
-        // onInputChange={(event, newInputValue) => {
-        //   setInputValue(newInputValue);
-        // }}
-        // onChange={(e, newValue) => {
-        //   if (newValue) {
-        //     setEmployee(newValue);
-        //   } else {
-        //     setEmployee(null);
-        //   }
-        // }}
+        onInputChange={(event, newInputValue) => {
+          setInputValue(newInputValue);
+        }}
+        value={document}
+        onChange={(e, newValue) => {
+          if (newValue) {
+            setDocument(newValue);
+          } else {
+            setDocument(null);
+          }
+        }}
         renderInput={(params) => <TextField {...params} label={label} />}
       />
     </>

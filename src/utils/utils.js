@@ -205,7 +205,7 @@ export const titleArray = [
   {
     id: generateRandomId(),
     title: "Dashboard",
-    link: "/",
+    link: "/dashboard",
   },
   {
     id: generateRandomId(),
@@ -224,8 +224,13 @@ export const titleArray = [
   },
   {
     id: generateRandomId(),
-    title: "Add Template",
+    title: "Templates  >  Add Template",
     link: "/templates/add",
+  },
+  {
+    id: generateRandomId(),
+    title: "Templates  >  Edit Template",
+    link: "/templates/edit",
   },
   {
     id: generateRandomId(),
@@ -241,6 +246,16 @@ export const titleArray = [
     id: generateRandomId(),
     title: "Completed Documents",
     link: "/completed",
+  },
+  {
+    id: generateRandomId(),
+    title: "Employee > Add Employee",
+    link: "/employee/add",
+  },
+  {
+    id: generateRandomId(),
+    title: "Employee > Edit Employee",
+    link: "/employee/edit",
   },
 ];
 

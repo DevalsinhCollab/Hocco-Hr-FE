@@ -159,16 +159,46 @@ export const searchEmployees = createAsyncThunk(
   }
 );
 
-export const getEmployeesById = createAsyncThunk(
-  "getEmployeesById",
+export const getEmployeeById = createAsyncThunk(
+  "getEmployeeById",
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_API}/employee/getEmployeesById/${data.id}`,
+        `${import.meta.env.VITE_BACKEND_API}/employee/getEmployeeById/${data.id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
       return rejectWithValue(error);
+    }
+  }
+);
+
+export const getLatestEmployees = createAsyncThunk(
+  "getLatestEmployees",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_API}/employee/getLatestEmployees`,
+        {
+          params: data,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
     }
   }
 );
@@ -181,6 +211,7 @@ export const employeeDetails = createSlice({
     loading: false,
     error: null,
     customer: {},
+    latestEmployees: []
   },
   reducers: {},
   extraReducers: {
@@ -264,6 +295,19 @@ export const employeeDetails = createSlice({
       state.loading = false;
     },
     [changeSignType.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    [getLatestEmployees.pending]: (state) => {
+      state.loading = true;
+    },
+    [getLatestEmployees.fulfilled]: (state, action) => {
+      state.latestEmployees = action.payload.data;
+      state.totalCount = action.payload.total;
+      state.loading = false;
+    },
+    [getLatestEmployees.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

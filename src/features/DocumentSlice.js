@@ -91,10 +91,60 @@ export const sendMultiAgreementsToEmps = createAsyncThunk(
   }
 );
 
+export const getLatestDocuments = createAsyncThunk(
+  "getLatestDocuments",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_API}/document/getLatestDocuments`,
+        {
+          params: data,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
+);
+
+export const getPendingDocuments = createAsyncThunk(
+  "getPendingDocuments",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_API}/document/getPendingDocuments`,
+        {
+          params: data,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
+);
+
 export const documentDetails = createSlice({
   name: "documentDetails",
   initialState: {
     documents: [],
+    latestDocuments: [],
+    pendingDocuments: [],
     loading: false,
     error: null,
     totalCount: 0,
@@ -154,6 +204,30 @@ export const documentDetails = createSlice({
       state.loading = false;
     },
     [checkPdfSignStatusEmployee.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    [getLatestDocuments.pending]: (state) => {
+      state.loading = true;
+    },
+    [getLatestDocuments.fulfilled]: (state, action) => {
+      state.latestDocuments = action.payload.data;
+      state.loading = false;
+    },
+    [getLatestDocuments.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    [getPendingDocuments.pending]: (state) => {
+      state.loading = true;
+    },
+    [getPendingDocuments.fulfilled]: (state, action) => {
+      state.pendingDocuments = action.payload.data;
+      state.loading = false;
+    },
+    [getPendingDocuments.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

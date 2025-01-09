@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import DashCard from "../../components/DashCard/DashCard";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getDashboardCount } from "../../features/dashboardSlice";
 import EmployeeIcon from "../../../public/Images/Employee.png"
 import DocumentIcon from "../../../public/Images/Document.png"
@@ -10,80 +10,105 @@ import UnsignedIcon from "../../../public/Images/Unsigned.png"
 import ProgressIcon from "../../../public/Images/Progress.png"
 import CompletedIcon from "../../../public/Images/Completed.png"
 import { DataGrid } from "@mui/x-data-grid";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { getLatestDocuments, getPendingDocuments } from "../../features/DocumentSlice";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import CircleIcon from "@mui/icons-material/Circle";
+import { EmployeeStatusColorHelper, EmployeeStatusDotColorHelper } from "../../constants/Employee-const";
+import moment from "moment/moment";
 
 const DashboardScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const { employeeCount, documentCount, signedCount, unSignedCount, inProgressCount, completedCount } = useSelector((state) => state.dashboardData)
-  const { employees, totalCount } = useSelector((state) => state.employeeData)
+  const { latestDocuments, pendingDocuments } = useSelector((state) => state.documentData)
 
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
-
-  const handlePaginationModelChange = (model) => {
-    setPage(model.page);
-    setPageSize(model.pageSize);
+  const openPdf = (url) => {
+    if (url) {
+      window.open(url, "_blank");
+    } else {
+      console.error("No valid URL provided.");
+    }
   };
 
   const columns = [
     {
-      field: "name",
-      headerName: "Name",
+      field: "",
+      headerName: "Actions",
       headerClassName: 'red-header',
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <div className="d-flex gap-2">
+            <Button
+              variant="outlined"
+              onClick={() => openPdf(params.row.document.Location)}
+            >
+              <RemoveRedEyeIcon />
+            </Button>
+          </div>
+        );
+      },
+    },
+    {
+      field: "empName",
+      headerName: "Employee Name",
       width: 250,
+      headerClassName: 'red-header',
     },
     {
       field: "empCode",
       headerName: "Employee Code",
+      width: 220,
       headerClassName: 'red-header',
-      width: 150,
     },
     {
-      field: "email",
-      headerName: "Email",
-      headerClassName: 'red-header',
-      width: 300,
-    },
-    {
-      field: "phone",
-      headerName: "Phone",
-      headerClassName: 'red-header',
-      width: 150,
-    },
-    {
-      field: "location",
-      headerName: "Location",
-      headerClassName: 'red-header',
+      field: "signType",
+      headerName: "Sign Type",
       width: 200,
+      headerClassName: 'red-header',
+      renderCell: ({ row }) => {
+        return (
+          <>
+            <CircleIcon
+              sx={{
+                fontSize: "15px",
+                color: EmployeeStatusDotColorHelper[row.signType],
+              }}
+            />
+            <Button
+              color={EmployeeStatusColorHelper[row.signType]}
+              sx={{ textTransform: "capitalize" }}
+            >
+              {row && row.signType}
+            </Button>
+          </>
+        );
+      },
     },
     {
-      field: "company",
+      field: "companyName",
       headerName: "Company Name",
+      width: 300,
       headerClassName: 'red-header',
-      width: 250,
       renderCell: ({ row }) => {
-        return row && row.company && row.company.name || ""
+        return row && row.company && row.company.name
       }
     },
     {
-      field: "adhar",
-      headerName: "Adhar",
+      field: "status",
+      headerName: "Status",
+      width: 200,
       headerClassName: 'red-header',
-      width: 150,
     },
     {
-      field: "birth",
-      headerName: "Birth",
+      field: "signStatus",
+      headerName: "Sign Status",
+      width: 200,
       headerClassName: 'red-header',
-      width: 150,
-    },
-    {
-      field: "gender",
-      headerName: "Gender",
-      headerClassName: 'red-header',
-      width: 150,
     },
   ];
 
@@ -116,13 +141,13 @@ const DashboardScreen = () => {
       link: "/unSignedDocs",
       borderColor: "#bcdaf6"
     },
-    {
-      title: "In Progress",
-      count: inProgressCount,
-      icon: ProgressIcon,
-      link: "/documents",
-      borderColor: "#ffe9f1"
-    },
+    // {
+    //   title: "In Progress",
+    //   count: inProgressCount,
+    //   icon: ProgressIcon,
+    //   link: "/documents",
+    //   borderColor: "#ffe9f1"
+    // },
     {
       title: "Completed",
       count: completedCount,
@@ -134,7 +159,10 @@ const DashboardScreen = () => {
 
   useEffect(() => {
     dispatch(getDashboardCount())
+    dispatch(getLatestDocuments())
+    dispatch(getPendingDocuments())
   }, [])
+
 
   return (
     <>
@@ -156,39 +184,43 @@ const DashboardScreen = () => {
                 ))}
             </div>
 
-
-            <Box>
-              <DataGrid
-                rows={employees}
-                columns={columns}
-                pagination
-                paginationMode="server"
-                rowCount={totalCount}
-                initialState={{
-                  ...(employees &&
-                    employees.length > 0 &&
-                    employees.initialState),
-                  pagination: {
-                    ...(employees &&
-                      employees.length > 0 &&
-                      employees.initialState &&
-                      employees.initialState?.pagination),
-                    paginationModel: {
-                      pageSize: pageSize,
-                    },
-                  },
-                }}
-                onPageChange={(newPage) => setPage(newPage)}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                onPaginationModelChange={handlePaginationModelChange}
-                rowsPerPageOptions={[10]}
-                getRowId={(e) => e._id}
-              />
-            </Box>
+            <div className="m-3 p-3 tableDiv" style={{ border: "2px solid #ffe7eb", borderRadius: "10px", boxShadow: " 0 0 10px 5px #f7f3f4" }}>
+              <Box sx={{ height: "auto", width: "100%" }}>
+                <div className="mb-3 d-flex align-items-center justify-content-between">
+                  <h4 className="m-0" style={{ color: "#1c1b6c", fontWeight: "bold" }}>{t("Latest Document")}</h4>
+                  <Button variant="outlined" onClick={() => navigate("/documents")}>Visit</Button>
+                </div>
+                <DataGrid
+                  rows={latestDocuments}
+                  columns={columns}
+                  getRowId={(e) => e._id}
+                  hideFooter
+                />
+              </Box>
+            </div>
           </div>
 
           <div className="right-side">
-            <h1>Hello there right side</h1>
+            <div className="p-3" style={{ border: "2px solid #ffe7eb", borderRadius: "10px", boxShadow: " 0 0 10px 5px #f7f3f4" }}>
+              <Box>
+                <div className="mb-3 d-flex align-items-center justify-content-between">
+                  <h4 className="m-0" style={{ color: "#1c1b6c", fontWeight: "bold" }}>{t("Pending Document")}</h4>
+                </div>
+
+                {pendingDocuments && pendingDocuments.map((item, index) => (
+                  <div className="d-flex justify-content-between" style={{ border: "2px solid #f0f0f0", padding: "1rem 1rem", marginBottom: '1rem', borderRadius: "5px" }}>
+                    <div>
+                      <p style={{ fontSize: "15px" }}>Name:- {item && item.empName}</p>
+                      <p style={{ fontSize: "15px" }}>Code:- {item && item.empCode}</p>
+                    </div>
+                    <div>
+                      <p style={{ fontSize: "15px", color: "#007c1b" }}>Created At</p>
+                      <p style={{ fontSize: "15px", color: "#0058aa" }}>{item && item.createdAt && moment(item.createdAt).format("DD-MMM-YYYY")}</p>
+                    </div>
+                  </div>
+                ))}
+              </Box>
+            </div>
           </div>
         </div>
       </div>

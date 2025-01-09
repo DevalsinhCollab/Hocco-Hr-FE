@@ -2,14 +2,11 @@ import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import {
-  checkPdfSignStatusEmployee,
   getAllDocuments,
 } from "../../features/DocumentSlice";
-import { toast } from "react-toastify";
 import {
   EmployeeStatusColorHelper,
   EmployeeStatusDotColorHelper,
@@ -18,14 +15,15 @@ import {
 } from "../../constants/Employee-const";
 import CircleIcon from "@mui/icons-material/Circle";
 import AgreementFormDialog from "./AgreementFormDialog";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, InputAdornment, TextField } from "@mui/material";
 import SearchEmployeeAutocomplete from "../../components/autocomplete/SearchEmployeeAutocomplete";
 import { useLocation } from "react-router-dom";
 import { SignTypeOption } from "../../utils/utils";
+import SearchIcon from '@mui/icons-material/Search';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 
 export default function Documents() {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
   const location = useLocation()
 
   const { documents, totalCount } = useSelector(state => state.documentData)
@@ -60,6 +58,8 @@ export default function Documents() {
       setStatus({ label: "Completed", value: "Completed" })
     }
 
+    setFilterOpen(false)
+
   }, [location])
 
   const callApi = () => {
@@ -92,7 +92,7 @@ export default function Documents() {
       field: "",
       headerName: "Actions",
       headerClassName: 'red-header',
-      width: 100,
+      width: 150,
       renderCell: (params) => {
         return (
           <div className="d-flex gap-2">
@@ -109,19 +109,19 @@ export default function Documents() {
     {
       field: "empName",
       headerName: "Employee Name",
-      width: 250,
+      width: 300,
       headerClassName: 'red-header',
     },
     {
       field: "empCode",
       headerName: "Employee Code",
-      width: 220,
+      width: 250,
       headerClassName: 'red-header',
     },
     {
       field: "signType",
       headerName: "Sign Type",
-      width: 200,
+      width: 244,
       headerClassName: 'red-header',
       renderCell: ({ row }) => {
         return (
@@ -165,24 +165,6 @@ export default function Documents() {
     },
   ];
 
-  const handlePdfCheck = async () => {
-    const response = await dispatch(checkPdfSignStatusEmployee());
-
-    if (
-      response &&
-      response.type &&
-      response.type == "checkPdfSignStatusEmployee/fulfilled"
-    ) {
-      dispatch(
-        getAllDocuments({
-          page,
-          pageSize,
-        })
-      );
-      toast.success(response.payload.message);
-    }
-  };
-
   const handleAddDocuments = () => {
     setOpen(true)
   }
@@ -190,35 +172,53 @@ export default function Documents() {
   return (
     <>
       <div className="home-content">
-        <div className="d-flex justify-content-between align-items-end w-100">
-          <div style={{ marginLeft: "1rem" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", flexDirection: { xs: "column", sm: "row", md: "row" }, gap: { xs: "1rem", sm: "0rem" }, marginLeft: "1rem" }}>
+          <div style={{ display: "flex", width: "82%" }}>
             <TextField
-              label="Search....."
               size="small"
-              placeholder="Search....."
+              placeholder="Search"
+              fullWidth
               onChange={(e) => setSearch(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  border: "2px solid #ffe7eb",
+                  borderRadius: "5px",
+                  boxShadow: "0 0 10px 5px #f7f3f4",
+                  "& fieldset": {
+                    border: "none",
+                  },
+                },
+              }}
             />
           </div>
           <div className="d-flex">
             <Button
               variant="outlined"
+              className="me-3"
               onClick={() => setFilterOpen(!filterOpen)}
-              sx={{ marginRight: "1rem" }}
+              sx={{ color: "#f89a74", fontWeight: "bold", border: "2px solid" }}
             >
-              Filter
+              <FilterAltOutlinedIcon /> Filter
             </Button>
 
             {["/documents"].includes(location.pathname) &&
-              <Button
-                variant="contained"
-                sx={{ marginRight: "1rem" }}
+              <button
+                className="btn btn-sm btn-primary px-3 me-3"
                 onClick={handleAddDocuments}
+                style={{ background: "#0058aa" }}
               >
-                Add Document
-              </Button>
+                ADD DOCUMENT
+              </button>
             }
           </div>
-        </div>
+        </Box>
 
         {filterOpen && (
           <Box className="card m-3 p-3 mb-3 d-flex justify-content-between" sx={{ background: "#ffe7eb" }}>
@@ -242,6 +242,19 @@ export default function Documents() {
                     renderInput={(params) => (
                       <TextField {...params} label="Status" />
                     )}
+                    componentsProps={{
+                      paper: {
+                        sx: {
+                          "& .MuiAutocomplete-option": {
+                            borderBottom: "1px solid #e7e7e7",
+                            padding: "8px 16px",
+                          },
+                          "& .MuiAutocomplete-option:last-child": {
+                            borderBottom: "none",
+                          },
+                        },
+                      },
+                    }}
                   />
 
                   <Autocomplete
@@ -253,6 +266,19 @@ export default function Documents() {
                     renderInput={(params) => (
                       <TextField {...params} label="Sign Status" />
                     )}
+                    componentsProps={{
+                      paper: {
+                        sx: {
+                          "& .MuiAutocomplete-option": {
+                            borderBottom: "1px solid #e7e7e7",
+                            padding: "8px 16px",
+                          },
+                          "& .MuiAutocomplete-option:last-child": {
+                            borderBottom: "none",
+                          },
+                        },
+                      },
+                    }}
                   /></>
               }
 
@@ -265,6 +291,19 @@ export default function Documents() {
                 renderInput={(params) => (
                   <TextField {...params} label="Sign Type" />
                 )}
+                componentsProps={{
+                  paper: {
+                    sx: {
+                      "& .MuiAutocomplete-option": {
+                        borderBottom: "1px solid #e7e7e7",
+                        padding: "8px 16px",
+                      },
+                      "& .MuiAutocomplete-option:last-child": {
+                        borderBottom: "none",
+                      },
+                    },
+                  },
+                }}
               />
             </div>
           </Box>

@@ -23,9 +23,40 @@ const SearchEmployeeAutocomplete = (props) => {
             response.payload &&
             response.payload.data.map((item) => ({
               label: `${item?.empCode} - ${item?.name}`,
-              empCode: item?.empCode,
-              empName: item.name,
-              value: item?._id,
+              value: item && item._id || "",
+              empCode: item && item.empCode || "",
+              empName: item && item.name || "",
+              email: item && item.email || "",
+              designation: item && item.designation || "",
+              salary: item && item.salary || "",
+              salaryPa: item && item.salaryPa || "",
+              basicSalary: item && item.basicSalary || "",
+              basicSalaryPa: item && item.basicSalaryPa || "",
+              allowances: item && item.allowances || "",
+              allowancesPa: item && item.allowancesPa || "",
+              educationAllowance: item && item.educationAllowance || "",
+              educationAllowancePa: item && item.educationAllowancePa || "",
+              attendanceAllowance: item && item.attendanceAllowance || "",
+              attendanceAllowancePa: item && item.attendanceAllowancePa || "",
+              hra: item && item.hra || "",
+              hraPa: item && item.hraPa || "",
+              monthlyBonus: item && item.monthlyBonus || "",
+              monthlyBonusPa: item && item.monthlyBonusPa || "",
+              productionIncentive: item && item.productionIncentive || "",
+              productionIncentivePa: item && item.productionIncentivePa || "",
+              companyContribution: item && item.companyContribution || "",
+              providentFund: item && item.providentFund || "",
+              providentFundPa: item && item.providentFundPa || "",
+              employeeStateInsuranceCorporation: item && item.employeeStateInsuranceCorporation || "",
+              employeeStateInsuranceCorporationPa: item && item.employeeStateInsuranceCorporationPa || "",
+              bonusExgratia: item && item.bonusExgratia || "",
+              bonusExgratiaPa: item && item.bonusExgratiaPa || "",
+              variablePay: item && item.variablePay || "",
+              variablePayPa: item && item.variablePayPa || "",
+              totalCTC: item && item.totalCTC || "",
+              totalCTCPa: item && item.totalCTCPa || "",
+              residentialAddress: item && item.residentialAddress || "",
+              noticePeriod: item && item.noticePeriod || "",
             }))
           );
         } catch (error) {
@@ -58,6 +89,19 @@ const SearchEmployeeAutocomplete = (props) => {
           }
         }}
         renderInput={(params) => <TextField {...params} label={label} />}
+        componentsProps={{
+          paper: {
+            sx: {
+              "& .MuiAutocomplete-option": {
+                borderBottom: "1px solid #e7e7e7",
+                padding: "8px 16px",
+              },
+              "& .MuiAutocomplete-option:last-child": {
+                borderBottom: "none",
+              },
+            },
+          },
+        }}
       />
     </>
   );

@@ -36,7 +36,7 @@ export default function LoginScreen() {
         email: "",
         password: "",
       });
-      navigate("/");
+      navigate("/dashboard");
     } else {
       toast(getData.payload.response.data.message);
     }

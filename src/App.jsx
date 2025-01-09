@@ -2,6 +2,7 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
+  Navigate,
 } from "react-router-dom";
 import LoginScreen from "./pages/Auth/LoginScreen";
 import { useEffect } from "react";
@@ -34,9 +35,14 @@ function App() {
         
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
-          {routesArray.map((item, index) => (
-            <Route path={item.link} element={<FullLayout Component={<item.component />} key={index} />} key={index} />
+          {routesArray.map((item) => (
+            <Route
+              key={item.id}
+              path={item.link}
+              element={<FullLayout Component={<item.component />} />}
+            />
           ))}
+          <Route path="*" element={<Navigate to="/dashboard" />} />
         </Route>
       </Routes>
     </Router>

@@ -24,6 +24,7 @@ const Sidebar = (props) => {
   const [open, setOpen] = useState(false);
 
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [hoveredSubIndex, setHoveredSubIndex] = useState(null);
 
   const handleMouseEnter = (index) => {
     setHoveredIndex(index);
@@ -31,6 +32,14 @@ const Sidebar = (props) => {
 
   const handleMouseLeave = () => {
     setHoveredIndex(null);
+  };
+
+  const handleSubMouseEnter = (index) => {
+    setHoveredSubIndex(index);
+  };
+
+  const handleSubMouseLeave = () => {
+    setHoveredSubIndex(null);
   };
 
   const handleClick = () => {
@@ -95,15 +104,14 @@ const Sidebar = (props) => {
               to={item.link}
               key={index}
               className={location.pathname === item.link ? "active" : ""}
-              onClick={item.children ? () => handleParentClick(index) : undefined}
+              onClick={item.submenu ? () => handleParentClick(index) : undefined}
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
               style={{ margin: "5px 0px", display: "flex", padding: "0px 20px" }}
             >
-              <img src={item.icon} style={{ marginRight: "1rem" }} />
+              <img src={location.pathname === item.link || hoveredIndex === index ? item.activeIcon : item.icon} style={{ marginRight: "1rem" }} />
 
               {!isNavbarClose &&
-
                 <span
                   className="links_name"
                   style={{
@@ -111,9 +119,36 @@ const Sidebar = (props) => {
                   }}
                 >
                   {t(item.title)}
+
+                  {item && item.submenu && activeMenu == index ? <ExpandLess sx={{ marginLeft: "5rem" }} /> : item && item.submenu && <ExpandMore sx={{ marginLeft: "5rem" }} />}
                 </span>
               }
             </Link>
+
+            {item.submenu && activeMenu == index && (
+              <ul style={{ marginLeft: "20px", padding: "0", listStyle: "none" }}>
+                {item.submenu.map((subItem, subIndex) => (
+                  <li key={subItem.id} style={{ padding: "5px 0" }}>
+                    <Link
+                      to={subItem.link}
+                      className={location.pathname === subItem.link ? "active" : ""}
+                      onMouseEnter={() => handleSubMouseEnter(subIndex)}
+                      onMouseLeave={handleSubMouseLeave}
+                      style={{ display: "flex", alignItems: "center", padding: "5px 20px" }}
+                    >
+                      <img src={location.pathname === subItem.link || hoveredSubIndex === subIndex ? subItem.activeIcon : subItem.icon} style={{ marginRight: "1rem" }} />
+                      <span
+                        style={{
+                          color: location.pathname === subItem.link || hoveredSubIndex === subIndex ? "#d61346" : "black",
+                        }}
+                      >
+                        {t(subItem.title)}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))}
         <li className="log_out text-light" onClick={_handleLogoutBtn}>

@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Papa from "papaparse";
 import { downloadEmployeeExcel } from "../../utils/utils";
-import { DownloadTwoTone } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Autocomplete, LoadingButton } from "@mui/lab";
@@ -18,7 +17,7 @@ import {
 } from "../../features/EmployeeDetailSlice";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-import { TextField } from "@mui/material";
+import { InputAdornment, Menu, MenuItem, TextField } from "@mui/material";
 import {
   signStatusOption,
   statusOption,
@@ -26,9 +25,16 @@ import {
 import EmployeeSignType from "../../components/Modal/EmployeeSignType";
 import SearchEmployeeAutocomplete from "../../components/autocomplete/SearchEmployeeAutocomplete";
 import AddEmployee from "../../components/AddEmployee";
+import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
+import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import SearchIcon from '@mui/icons-material/Search';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useNavigate } from "react-router-dom";
 
 export default function Employees() {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const { employees, totalCount } = useSelector((state) => state.employeeData)
 
@@ -40,12 +46,12 @@ export default function Employees() {
   const [empInputValue, setEmpInputValue] = useState("");
   const [employee, setEmployee] = useState(null);
   const [search, setSearch] = useState("");
-  const [operationMode, setOperationMode] = useState("add");
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [openEmployee, setOpenEmployee] = useState(false);
   const [employeeId, setEmployeeId] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
   const callApi = () => {
     dispatch(
@@ -72,8 +78,8 @@ export default function Employees() {
     search,
   ]);
 
-  const handleDelete = async (id) => {
-    const response = await dispatch(deleteEmployee(id));
+  const handleDelete = async () => {
+    const response = await dispatch(deleteEmployee(employeeId));
 
     if (response && response.type === "deleteEmployee/fulfilled") {
       toast.success(response.payload.message);
@@ -83,41 +89,69 @@ export default function Employees() {
 
   const handleEdit = (event, data) => {
     event.stopPropagation();
-    setOpenEmployee(true)
-    setOperationMode("edit")
-    setEmployeeId(data.row._id)
+    navigate(`/employee/edit/${data.id}`)
+    setAnchorEl(null);
   }
+
+  const handleClick = (event, data) => {
+    setAnchorEl(event.currentTarget);
+    setEmployeeId(data.row._id)
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const columns = [
     {
       field: "",
       headerName: "Actions",
       headerClassName: 'red-header',
-      width: 200,
+      width: 100,
       renderCell: (params) => {
         return (
           <div className="d-flex gap-2">
-            <Tooltip title="Edit">
-              <Button
-                variant="outlined"
+            <Button
+              id="basic-button"
+              aria-controls={open ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={(event) => handleClick(event, params)}
+            >
+              <MoreVertIcon sx={{color: "#838383"}} />
+            </Button>
+
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+              PaperProps={{
+                sx: {
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+                  marginLeft: "3rem",
+                },
+              }}
+            >
+              <MenuItem
                 onClick={(event) => handleEdit(event, params)}
+                sx={{ color: "#007c1b", gap: "0.3rem", fontSize: "19px" }}
               >
                 <EditIcon />
-              </Button>
-            </Tooltip>
-
-            <Tooltip title="Delete">
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={(event) => {
-                  event.stopPropagation(); // Prevent row selection
-                  handleDelete(params.row._id);
-                }}
+                Edit
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleDelete()}
+                sx={{ color: "#a30000", gap: "0.3rem", fontSize: "19px" }}
               >
                 <DeleteIcon />
-              </Button>
-            </Tooltip>
+                Delete
+              </MenuItem>
+            </Menu>
           </div>
         );
       },
@@ -260,8 +294,7 @@ export default function Employees() {
   };
 
   const handleAddEmployee = () => {
-    setOperationMode("add")
-    setOpenEmployee(true)
+    navigate("/employee/add")
   }
 
   return (
@@ -269,37 +302,33 @@ export default function Employees() {
       <div className="home-content" style={{ padding: "7rem 1rem" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", flexDirection: { xs: "column", sm: "row", md: "row" }, gap: "1rem", marginLeft: "1rem" }}>
           <div style={{ display: "flex" }}>
-            {/* <TextField
-              label="Search....."
-              size="small"
-              placeholder="Search....."
-              onChange={(e) => setSearch(e.target.value)}
-            /> */}
-
-            <button
-              className="btn btn-sm btn-primary me-2 px-3 d-flex align-items-center justify-content-center gap-2"
-              onClick={downloadFile}
-            >
-              <DownloadTwoTone /> Upload
-            </button>
-            <button
-              className="btn btn-sm btn-primary me-2 px-3 py-0 d-flex align-items-center justify-content-center gap-2"
+            <Button variant="outlined"
+              sx={{ marginRight: "1rem", color: "#58aff6", fontWeight: "bold", border: "2px solid" }}
               onClick={handleDownload}
             >
-              <DownloadTwoTone /> Download
-            </button>
+              <DownloadOutlinedIcon /> Download Excel
+            </Button>
+
+            <Button variant="outlined"
+              sx={{ color: "#0058aa", fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
+              onClick={downloadFile}
+            >
+              <UploadOutlinedIcon /> Sample
+            </Button>
+
           </div>
           <div className="d-flex gap-2">
             <Button
               variant="outlined"
               onClick={() => setFilterOpen(!filterOpen)}
+              sx={{ color: "#f89a74", fontWeight: "bold", border: "2px solid" }}
             >
-              Filter
+              <FilterAltOutlinedIcon /> Filter
             </Button>
 
             <Button
               variant="contained"
-              sx={{ marginRight: "1rem" }}
+              sx={{ marginRight: "1rem", fontWeight: "bold" }}
               onClick={handleAddEmployee}
             >
               Add Employee
@@ -308,7 +337,7 @@ export default function Employees() {
         </Box>
 
         {filterOpen && (
-          <Box className="card m-3 p-3 mb-3 d-flex justify-content-between" sx={{ background: "#ffe7eb" }}>
+          <Box className="m-3 p-3 mb-3 d-flex justify-content-between" sx={{ background: "#ffe7eb", borderRadius: "5px" }}>
             <div className="d-flex gap-4">
               <SearchEmployeeAutocomplete
                 label={"Name"}
@@ -327,6 +356,19 @@ export default function Employees() {
                 renderInput={(params) => (
                   <TextField {...params} label="Status" />
                 )}
+                componentsProps={{
+                  paper: {
+                    sx: {
+                      "& .MuiAutocomplete-option": {
+                        borderBottom: "1px solid #e7e7e7",
+                        padding: "8px 16px",
+                      },
+                      "& .MuiAutocomplete-option:last-child": {
+                        borderBottom: "none",
+                      },
+                    },
+                  },
+                }}
               />
 
               <Autocomplete
@@ -338,29 +380,25 @@ export default function Employees() {
                 renderInput={(params) => (
                   <TextField {...params} label="Sign Status" />
                 )}
+                componentsProps={{
+                  paper: {
+                    sx: {
+                      "& .MuiAutocomplete-option": {
+                        borderBottom: "1px solid #e7e7e7",
+                        padding: "8px 16px",
+                      },
+                      "& .MuiAutocomplete-option:last-child": {
+                        borderBottom: "none",
+                      },
+                    },
+                  },
+                }}
               />
             </div>
           </Box>
         )}
 
         <Box sx={{ display: "flex", justifyContent: "end", flexDirection: { xs: "column", sm: "row", md: "row" }, gap: "1rem", mt: 2, px: 2 }}>
-          {/* <Box sx={{ display: "flex" }}>
-
-            <button
-              className="btn btn-sm btn-primary me-2 px-3 d-flex align-items-center justify-content-center gap-2"
-              onClick={downloadFile}
-            >
-              <DownloadTwoTone /> Upload
-            </button>
-            <button
-              className="btn btn-sm btn-primary me-2 px-3 py-0 d-flex align-items-center justify-content-center gap-2"
-              onClick={handleDownload}
-            >
-              <DownloadTwoTone /> Download
-            </button>
-          </Box> */}
-
-
           <Box sx={{ display: "flex", gap: "1rem" }}>
             <input
               type="file"
@@ -378,8 +416,34 @@ export default function Employees() {
           </Box>
         </Box>
 
-        <div className="teamMainBox">
-          <div className="card m-3">
+        <Box sx={{ display: "flex", marginLeft: "1rem", marginTop: "1rem", marginRight: "1rem" }}>
+          <TextField
+            size="small"
+            placeholder="Search"
+            onChange={(e) => setSearch(e.target.value)}
+            fullWidth
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                border: "2px solid #ffe7eb",
+                borderRadius: "5px",
+                boxShadow: "0 0 10px 5px #f7f3f4",
+                "& fieldset": {
+                  border: "none",
+                },
+              },
+            }}
+          />
+        </Box>
+
+        <div>
+          <div className="m-3">
             <Box sx={{ height: "auto", width: "100%" }}>
               <DataGrid
                 rows={employees}
@@ -411,8 +475,6 @@ export default function Employees() {
           </div>
         </div>
       </div>
-
-      <AddEmployee open={openEmployee} setOpen={setOpenEmployee} callApi={callApi} operationMode={operationMode} setOperationMode={setOperationMode} employeeId={employeeId} />
 
       <EmployeeSignType show={signType} setShow={setSignType} />
     </>
