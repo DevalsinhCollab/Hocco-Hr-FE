@@ -151,6 +151,22 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const getAllAdharDataForExcel = createAsyncThunk(
+  "getAllAdharDataForExcel",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}/aadhar/getAllAdharDataForExcel`,
+        data,
+        getApisHeaders()
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const authDetail = createSlice({
   name: "authDetail",
   initialState: {

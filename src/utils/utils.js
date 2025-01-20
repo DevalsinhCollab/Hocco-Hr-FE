@@ -61,6 +61,83 @@ export const formatDate = (date) => {
   return formattedDate;
 };
 
+export const downloadCustomerExcel = (jsonData, userData) => {
+  let downloadData = [];
+  jsonData.forEach((element) => {
+    let innerData = {
+      "Cust Code": element.custCode,
+      "Cust Name": element.custName,
+      "Sd Code": element.sdCode,
+      "Sd Name": element.sdName,
+      "Address Description": element.addressDescription,
+      "Cust Address": element.custAddress,
+      "Pin Code": element.pinCode,
+      City: element.city,
+      "State Code": element.stateCode,
+      "State Name": element.stateName,
+      Country: element.country,
+      "Wholesaler Code": element.wholesalerCode,
+      "Wholeseller Name": element.wholesellerName,
+      Site: element.site,
+      Warehouse: element.warehouse,
+      "Price Group": element.priceGroup,
+      "Created Date": element.createdDate && formatDate(element.createdDate),
+      "First Billing Date":
+        element.firstBillingDate && formatDate(element.firstBillingDate),
+      "Closing Date": element.closingDate && formatDate(element.closingDate),
+      "Cust Email Id": element.custEmailID,
+      "Contact Person Name": element.contactPersonName,
+      "Contact Person Mobile": element.contactPersonMobile,
+      "Cust Group Code": element.custGroupCode,
+      "Cust Group Name": element.custGroupName,
+      "Channel Code": element.channelCode,
+      "Channel Name": element.channelName,
+      "Sub Channel Code": element.subChannelCode,
+      "Sub Channel Name": element.subChannelName,
+      "Sales Group": element.salesGroup,
+      Pan: element.pan,
+      Adhar: element.adhar,
+      Gst: element.gst,
+      "Code Creation Emp Code": element.codeCreationEmpCode,
+      "Rgm Code": element.rgmCode,
+      "Rgm Name": element.rgmName,
+      "Zm RSM Code": element.zmRSMCode,
+      "Zm RSM Name": element.zmRSMName,
+      "Asm Code": element.asmCode,
+      "Asm Name": element.asmName,
+      "Asm Email": element.asmEmail,
+      "Tsm VSE Code": element.tsmVSECode,
+      "Tsm VSE Name": element.tsmVSEName,
+      "Tsm VSE Email": element.tsmVSEEmail,
+      "National Head Code": element.nationalHeadCode,
+      "National Head Name": element.nationalHeadName,
+      "Birth Year": element.birthYear,
+      Gender: element.gender,
+      "Rsm Code": element.rsmCode,
+      "Rsm Name": element.rsmName,
+      "Adhar Name": element.adharName,
+      "Created At": element.createdAt && formatDate(element.createdAt),
+      "Updated At": element.updatedAt && formatDate(element.updatedAt),
+    };
+    downloadData.push(innerData);
+  });
+  return downloadData;
+};
+
+export const downloadAgreementExcel = (jsonData) => {
+  let downloadData = [];
+  jsonData.forEach((element) => {
+    let innerData = {
+      "Customer Name": element && element.custName,
+      "Customer Code": element && element.custCode,
+      Asset: element.assetSerialNumber,
+      "Sign Status": element.signStatus == "US" ? "Unsigned" : "Signed",
+    };
+    downloadData.push(innerData);
+  });
+  return downloadData;
+};
+
 export const downloadLogExcel = (jsonData, userData) => {
   let downloadData = [];
   jsonData.forEach((element) => {
@@ -196,6 +273,21 @@ export const downloadVrsExcel = (jsonData, userData) => {
   return downloadData;
 };
 
+export const downloadAdharExcel = (jsonData, userData) => {
+  let downloadData = [];
+  jsonData.forEach((element) => {
+    let innerData = {
+      "Name": element.custCode,
+      "Aadhar No.": element.adhar,
+      "Birth Year": element.birth,
+      "Phone": element.phone,
+      "Customer Code": element.custCode,
+    };
+    downloadData.push(innerData);
+  });
+  return downloadData;
+};
+
 export const signTypeArray = [
   { label: "Adhar", value: "adhar" },
   { label: "Dsc", value: "dsc" }
@@ -206,6 +298,46 @@ export const titleArray = [
     id: generateRandomId(),
     title: "Dashboard",
     link: "/dashboard",
+  },
+  {
+    id: generateRandomId(),
+    title: "Customers",
+    link: "/customers",
+  },
+  {
+    id: generateRandomId(),
+    title: "Customer Details",
+    link: "/customerDetails",
+  },
+  {
+    id: generateRandomId(),
+    title: "Asset Master",
+    link: "/assetsmaster",
+  },
+  {
+    id: generateRandomId(),
+    title: "Asset Tracker",
+    link: "/assetstracker",
+  },
+  {
+    id: generateRandomId(),
+    title: "Agreements",
+    link: "/agreements",
+  },
+  {
+    id: generateRandomId(),
+    title: "Delivery Challan",
+    link: "/deliverychallan",
+  },
+  {
+    id: generateRandomId(),
+    title: "Delivery Challan History",
+    link: "/deliverychallan",
+  },
+  {
+    id: generateRandomId(),
+    title: "Aadhar Data",
+    link: "/aadharData",
   },
   {
     id: generateRandomId(),
@@ -256,6 +388,27 @@ export const titleArray = [
     id: generateRandomId(),
     title: "Employee > Edit Employee",
     link: "/employee/edit",
+  },
+
+  {
+    id: generateRandomId(),
+    title: "Distributor",
+    link: "/distributor",
+  },
+  {
+    id: generateRandomId(),
+    title: "CFA",
+    link: "/cfa",
+  },
+  {
+    id: generateRandomId(),
+    title: "VRS",
+    link: "/vrs",
+  },
+  {
+    id: generateRandomId(),
+    title: "Documents",
+    link: "/distributorDocuments",
   },
 ];
 

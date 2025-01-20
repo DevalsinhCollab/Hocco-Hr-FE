@@ -17,6 +17,9 @@ const Sidebar = (props) => {
   const location = useLocation();
   const dispatch = useDispatch();
 
+  console.log(location, "location======");
+  
+
   const { auth } = useSelector((state) => state.authData);
   const { companies } = useSelector((state) => state.companyData);
 
@@ -68,6 +71,10 @@ const Sidebar = (props) => {
     setOpen(!open);
   };
 
+  let filteredSideBarArray = sideBarArray.filter((item) =>
+    item.role.includes(auth && auth.userType !== undefined && auth.userType)
+  );
+
   return (
     <div className={`sidebar ${isNavbarClose ? "sidebar-close" : ""}`}>
       <div className="logo-details">
@@ -76,46 +83,48 @@ const Sidebar = (props) => {
         </span>
       </div>
 
-      <List
-        sx={{ width: "100%", maxWidth: 360, color: "#fff" }}
-        component="nav"
-        aria-labelledby="nested-list-subheader"
-      >
-        <ListItemButton onClick={handleClick} sx={{ bgcolor: "#d51245" }} className="company">
-          <ListItemText primary="Companies" />
-          {open ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          {companies &&
-            companies.map((item, index) => (
-              <List component="div" disablePadding onClick={() => handleGetCompany(item)} key={index} >
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText primary={item.name} style={{ color: "black" }} className="companyList" />
-                </ListItemButton>
-              </List>
-            ))}
-        </Collapse>
-      </List>
+      {auth && auth.userType && ["HR", "AHR"].includes(auth.userType) &&
+        <List
+          sx={{ width: "100%", maxWidth: 360, color: "#fff" }}
+          component="nav"
+          aria-labelledby="nested-list-subheader"
+        >
+          <ListItemButton onClick={handleClick} sx={{ bgcolor: "#d51245" }} className="company">
+            <ListItemText primary="Companies" />
+            {open ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            {companies &&
+              companies.map((item, index) => (
+                <List component="div" disablePadding onClick={() => handleGetCompany(item)} key={index} >
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemText primary={item.name} style={{ color: "black" }} className="companyList" />
+                  </ListItemButton>
+                </List>
+              ))}
+          </Collapse>
+        </List>
+      }
 
       <ul className="nav-links ps-0">
-        {sideBarArray.map((item, index) => (
+        {filteredSideBarArray.map((item, index) => (
           <li key={index} style={{ padding: isNavbarClose ? "0px 10px" : "0px 15px" }}>
             <Link
               to={item.link}
               key={index}
-              className={location.pathname === item.link ? "active" : ""}
+              className={item.activeLink.includes(location.pathname) ? "active" : ""}
               onClick={item.submenu ? () => handleParentClick(index) : undefined}
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
               style={{ margin: "5px 0px", display: "flex", padding: "0px 20px" }}
             >
-              <img src={location.pathname === item.link || hoveredIndex === index ? item.activeIcon : item.icon} style={{ marginRight: "1rem" }} />
+              <img src={item.activeLink.includes(location.pathname) || hoveredIndex == index ? item.activeIcon : item.icon} style={{ marginRight: "1rem" }} />
 
               {!isNavbarClose &&
                 <span
                   className="links_name"
                   style={{
-                    color: location.pathname === item.link || hoveredIndex === index ? "#d61346" : "black",
+                    color: item.activeLink.includes(location.pathname) || hoveredIndex == index ? "#d61346" : "black",
                   }}
                 >
                   {t(item.title)}

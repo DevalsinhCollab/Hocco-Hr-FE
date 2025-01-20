@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { createTemplateForHtml, getTemplateById, updateTemplate } from "../../features/TemplateDetailSlice";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import AddTemplateIcon from "../../../public/Images/AddTemplate.png"
+
 
 import JoditEditor from "jodit-react";
 
@@ -17,6 +19,7 @@ import QuillBetterTable from "quill-better-table";
 import { LoadingButton } from "@mui/lab";
 import SearchCompanyAutocomplete from "../../components/autocomplete/SearchCompanyAutocomplete";
 import _ from "lodash";
+import { Box, Typography } from "@mui/material";
 Quill.register("modules/better-table", QuillBetterTable);
 
 window.katex = katex;
@@ -97,36 +100,52 @@ const AddTemplate = (props) => {
 
   return (
     <div className="home-content">
-      <div className="teamMainBox">
-        <div className="card m-3 p-3">
-          <div className="mb-5 d-flex flex-column align-items-center justify-content-between">
-            <SearchCompanyAutocomplete inputValue={inputValue} setInputValue={setInputValue} company={company} setCompany={setCompany} />
-
-            <TextField
-              label="Enter Template Name"
-              variant="outlined"
-              sx={{ marginTop: "1rem" }}
-              onChange={(e) => setTemplateName(e.target.value)}
-              value={templateName}
-              className="col-12"
-            />
-            <div className="col-12 mt-3">
-              <JoditEditor
-                ref={editor}
-                value={text}
-                tabIndex={1}
-                onChange={(newContent) => handleChange(newContent)}
-              />
-            </div>
-          </div>
-          <LoadingButton
-            variant="contained"
-            loading={loading}
-            onClick={handleSubmit}
+      <Box sx={{ display: "flex", justifyContent: "space-between", flexDirection: { xs: "column", sm: "row", md: "row" }, gap: "1rem", marginLeft: "1rem" }}>
+        <div style={{ display: "flex" }}>
+          <div
+            style={{ borderRadius: "999px", background: "#c70d3e", width: "2.5rem", display: "flex", justifyContent: "center", alignContent: "center" }}
           >
-            Submit
-          </LoadingButton>
+            <img
+              src={AddTemplateIcon}
+              alt="User"
+              style={{ width: "1rem", height: "1.2rem", marginTop: "0.4rem" }}
+            />
+          </div>
+
+          <Typography variant="h5" sx={{ marginLeft: "1rem" }}>Add Templates</Typography>
         </div>
+      </Box>
+
+      <div className="m-3">
+        <div className="mb-5 d-flex flex-column align-items-center justify-content-between">
+          <SearchCompanyAutocomplete inputValue={inputValue} setInputValue={setInputValue} company={company} setCompany={setCompany} />
+
+          <TextField
+            label="Enter template name"
+            variant="outlined"
+            sx={{ marginTop: "1rem" }}
+            onChange={(e) => setTemplateName(e.target.value)}
+            value={templateName}
+            className="col-12"
+          />
+          <div className="col-12 mt-3">
+            <JoditEditor
+              ref={editor}
+              value={text}
+              tabIndex={1}
+              onChange={(newContent) => handleChange(newContent)}
+            />
+          </div>
+        </div>
+        <LoadingButton
+          variant="contained"
+          loading={loading}
+          onClick={handleSubmit}
+          sx={{ background: "#0058aa" }}
+          fullWidth
+        >
+          Submit
+        </LoadingButton>
       </div>
     </div>
   );

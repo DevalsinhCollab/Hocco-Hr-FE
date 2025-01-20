@@ -9,8 +9,7 @@ import { Button, InputAdornment, Menu, MenuItem, TextField } from "@mui/material
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-
+import LaptopIcon from '@mui/icons-material/Laptop';
 
 export default function Templates() {
   const dispatch = useDispatch();
@@ -34,18 +33,7 @@ export default function Templates() {
   const handleEdit = (event, data) => {
     event.stopPropagation();
     navigate(`/templates/edit/${data.row._id}`)
-    // setAnchorEl(null);
   }
-
-
-  const handleDelete = async () => {
-    // const response = await dispatch(deleteEmployee(employeeId));
-
-    // if (response && response.type === "deleteEmployee/fulfilled") {
-    //   toast.success(response.payload.message);
-    //   callApi()
-    // }
-  };
 
   const handleClick = (event, data) => {
     setAnchorEl(event.currentTarget);
@@ -119,15 +107,10 @@ export default function Templates() {
       field: "company",
       headerName: "Company Name",
       headerClassName: 'red-header',
-      width: 250,
+      flex: 1,
       renderCell: ({ row }) => {
         return row && row.company && row.company.name || ""
       }
-    },
-    {
-      field: "",
-      headerClassName: 'red-header',
-      width: 1044,
     },
   ];
 
@@ -152,7 +135,7 @@ export default function Templates() {
               ),
             }}
             sx={{
-              width: "84%",
+              width: "80%",
               "& .MuiOutlinedInput-root": {
                 border: "2px solid #ffe7eb",
                 borderRadius: "5px",
@@ -164,16 +147,16 @@ export default function Templates() {
             }}
           />
 
-          <button
-            className="btn btn-sm btn-primary px-3 me-3"
+          <Button
+            variant="outlined"
             onClick={() => navigate("/templates/add")}
-            style={{ background: "#0058aa" }}
+            sx={{ color: "#f89a74", fontWeight: "bold", border: "2px solid", marginRight: "1rem" }}
           >
-            Add - Customize Template
-          </button>
+            <LaptopIcon style={{ marginRight: "0.5rem" }} /> Add - Customize Template
+          </Button>
         </Box>
 
-        <div className="teamMainBox">
+        <div>
           <div className="card m-3">
             <Box sx={{ height: "auto", width: "100%" }}>
               <DataGrid

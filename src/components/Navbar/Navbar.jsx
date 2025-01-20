@@ -34,30 +34,30 @@ const Navbar = (props) => {
     navigate("/login");
   };
 
-  // useEffect(() => {
-  //   let mainTitle = titleArray.find((item) => location.pathname.includes(item.link)).title
-  //   setTitle(mainTitle)
-  // }, [location])
+  useEffect(() => {
+    let mainTitle = titleArray.find((item) => location.pathname.includes(item.link)).title
+    setTitle(mainTitle)
+  }, [location])
 
   return (
     <nav>
       <div className="sidebar-button" onClick={toggleNavbar}>
         <i className="bx bx-menu sidebarBtn"></i>
-        {/* <span className="dashboard">{t(title)}</span> */}
+        <span className="dashboard">{title !== "" ? t(title) : ""}</span>
       </div>
 
       <Dropdown className="d-flex align-items-center gap-3">
         <Dropdown>
           <Dropdown.Toggle
             style={{
-              backgroundColor: "#f1f1f1",
+              backgroundColor: "#ffffff",
               border: "2px solid #efeef1",
               borderRadius: "9999px",
             }}
           >
-            <img src={LanguageIcon}  />
+            <img src={LanguageIcon} />
 
-            <span className="text-dark" style={{marginLeft: "0.3rem"}}>
+            <span className="text-dark" style={{ marginLeft: "0.3rem" }}>
               {localStorage.getItem("language")
                 ? localStorage.getItem("language").toUpperCase()
                 : "EN"}
@@ -87,7 +87,7 @@ const Navbar = (props) => {
           <img
             src={imageSrc !== null ? imageSrc : "./Images/user.jpg"}
             alt="User"
-            style={{borderRadius: "999pc"}}
+            style={{ borderRadius: "999pc" }}
           />
           <span className="admin_name">{auth && auth.name}</span>
           <i className="bx bx-chevron-down"></i>

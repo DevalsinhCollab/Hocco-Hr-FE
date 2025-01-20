@@ -309,7 +309,7 @@ export default function Documents() {
           </Box>
         )}
 
-        <div className="teamMainBox">
+        <div>
           <div className="card m-3">
             <Box sx={{ height: "auto", width: "100%" }}>
               <DataGrid

@@ -17,7 +17,6 @@ const EmployeeForm = () => {
     const currentLocation = useLocation()
     const { id: employeeId } = useParams()
 
-
     const { loading } = useSelector(state => state.employeeData)
 
     const [inputValue, setInputValue] = useState("");
