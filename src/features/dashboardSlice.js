@@ -47,6 +47,28 @@ export const dfDashboard = createAsyncThunk(
     }
 );
 
+export const disDashboard = createAsyncThunk(
+    "disDashboard",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_API}/dashboard/disDashboard`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        authorization: `Bearer ${getTokenFromLocalStorage()}`,
+                    },
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(
+                error.response ? error.response.data : error.message
+            );
+        }
+    }
+);
+
 export const dashboardDetails = createSlice({
     name: "dashboardDetails",
     initialState: {
@@ -59,6 +81,10 @@ export const dashboardDetails = createSlice({
         dfCount: 0,
         customerCount: 0,
         agreementCount: 0,
+        disCount: 0,
+        cfaCount: 0,
+        vrsCount: 0,
+        disTemplateCount: 0,
         loading: false,
         error: null,
     },
@@ -94,6 +120,23 @@ export const dashboardDetails = createSlice({
             state.loading = false;
         },
         [dfDashboard.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
+
+        [disDashboard.pending]: (state) => {
+            state.loading = true;
+        },
+        [disDashboard.fulfilled]: (state, action) => {
+            const { disCount, cfaCount, vrsCount, disTemplateCount } = action.payload
+
+            state.disCount = disCount
+            state.cfaCount = cfaCount
+            state.vrsCount = vrsCount
+            state.disTemplateCount = disTemplateCount
+            state.loading = false;
+        },
+        [disDashboard.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },

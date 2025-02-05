@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { LoginAdmin, googlelogin } from "../../features/authDetailsSlice";
+import { login, googlelogin } from "../../features/authDetailsSlice";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { gapi } from "gapi-script";
@@ -27,7 +27,7 @@ export default function LoginScreen() {
     if (!user.email) return toast("Please enter your email");
     if (!user.password) return toast("Please enter your password");
 
-    const getData = await dispatch(LoginAdmin(user));
+    const getData = await dispatch(login(user));
 
     if (getData.type.includes("fulfilled")) {
       // eslint-disable-next-line

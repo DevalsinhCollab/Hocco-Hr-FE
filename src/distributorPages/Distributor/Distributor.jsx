@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Papa from "papaparse";
 import { useTranslation } from "react-i18next";
-import { downloadDisExcel, downloadEmployeeExcel } from "../../utils/utils";
-import { DownloadTwoTone } from "@mui/icons-material";
+import { downloadDisExcel } from "../../utils/utils";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Autocomplete, LoadingButton } from "@mui/lab";
@@ -17,7 +16,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import SendIcon from "@mui/icons-material/Send";
 import Tooltip from "@mui/material/Tooltip";
-import { TextField } from "@mui/material";
+import { InputAdornment, TextField } from "@mui/material";
 import { signStatusOption, statusOption } from "../../constants/Employee-const";
 import {
   addDoc,
@@ -29,15 +28,19 @@ import {
 import DistributorEditModal from "../../components/Modal/DistributorEditModal";
 import ViewDistributorDoc from "../../components/Modal/ViewDistributorDoc";
 import { sendAgreementToDistributor } from "../../features/DistributorDocumentSlice";
+import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
+import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import SearchIcon from '@mui/icons-material/Search';
 
 export default function Distributor() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
-  const { error } = useSelector((state) => state.userData);
+
   const { distributors, loading, totalCount } = useSelector(
     (state) => state.distributorData
   );
-  const { t } = useTranslation();
 
   const [jsonData, setJsonData] = useState([]);
   const [editModal, setEditModal] = useState([false, null]);
@@ -46,6 +49,7 @@ export default function Distributor() {
   const [status, setStatus] = useState({});
   const [signStatus, setSignStatus] = useState({});
   const [docAdded, setDocAdded] = useState(false);
+  const [search, setSearch] = useState("")
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -57,13 +61,14 @@ export default function Distributor() {
         pageSize,
         status: (status && status.value) || "",
         signStatus: (signStatus && signStatus.value) || "",
+        search: search || ""
       })
     );
   };
 
   useEffect(() => {
     callApi();
-  }, [page, pageSize, dispatch, docAdded, status, signStatus]);
+  }, [page, pageSize, dispatch, docAdded, status, signStatus, search]);
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -147,7 +152,8 @@ export default function Distributor() {
     {
       field: "",
       headerName: "Actions",
-      width: 300,
+      width: 200,
+      headerClassName: 'red-header',
       renderCell: (params) => {
         return (
           <div className="d-flex gap-2">
@@ -175,53 +181,6 @@ export default function Distributor() {
                 <DeleteIcon />
               </Button>
             </Tooltip>
-
-            {params && params.row && !params.row.document ? (
-              <Tooltip title="Upload document">
-                <LoadingButton
-                  component="label"
-                  role={undefined}
-                  variant="contained"
-                  startIcon={<CloudUploadIcon />}
-                  loading={loading}
-                  onClick={(event) => event.stopPropagation()} // Prevent row selection
-                >
-                  <VisuallyHiddenInput
-                    type="file"
-                    accept="application/pdf"
-                    onChange={(e) => handleFileChange(e, params.row)}
-                  />
-                </LoadingButton>
-              </Tooltip>
-            ) : (
-              <>
-                <Tooltip title="Sent Agreement">
-                  <LoadingButton
-                    variant="outlined"
-                    color="success"
-                    onClick={(event) => {
-                      event.stopPropagation(); // Preve
-                      handleAgreementSend(params.row);
-                    }}
-                    loading={loading}
-                  >
-                    <SendIcon />
-                  </LoadingButton>
-                </Tooltip>
-
-                <Tooltip title="View Agreement">
-                  <Button
-                    variant="outlined"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      handleOpenDoc(params.row);
-                    }}
-                  >
-                    <RemoveRedEyeIcon />
-                  </Button>
-                </Tooltip>
-              </>
-            )}
           </div>
         );
       },
@@ -229,57 +188,68 @@ export default function Distributor() {
     {
       field: "name",
       headerName: "Name",
+      headerClassName: 'red-header',
       width: 250,
     },
     {
       field: "custCode",
       headerName: "Customer Code",
-      width: 150,
+      headerClassName: 'red-header',
+      width: 180,
     },
     {
       field: "email",
       headerName: "Email",
+      headerClassName: 'red-header',
       width: 300,
     },
     {
       field: "status",
       headerName: "Status",
+      headerClassName: 'red-header',
       width: 150,
     },
     {
       field: "signStatus",
       headerName: "Sign Status",
+      headerClassName: 'red-header',
       width: 150,
     },
     {
       field: "phone",
       headerName: "Phone",
-      width: 150,
+      headerClassName: 'red-header',
+      width: 180,
     },
     {
       field: "adhar",
       headerName: "Adhar",
+      headerClassName: 'red-header',
       width: 150,
     },
     {
       field: "birth",
       headerName: "Birth",
+      headerClassName: 'red-header',
       width: 150,
     },
     {
       field: "gender",
       headerName: "Gender",
+      headerClassName: 'red-header',
       width: 150,
     },
     {
       field: "startDate",
       headerName: "Start Date",
+      headerClassName: 'red-header',
       width: 150,
     },
     {
       field: "endDate",
       headerName: "End Date",
-      width: 150,
+      headerClassName: 'red-header',
+      width: 180,
     },
   ];
 
@@ -327,6 +297,7 @@ export default function Distributor() {
     let finalObject = {
       status: (status && status.value) || "",
       signStatus: (signStatus && signStatus.value) || "",
+      search: search || ""
     };
     const response = await dispatch(DistributorExcelDownload(finalObject));
 
@@ -366,88 +337,105 @@ export default function Distributor() {
   return (
     <>
       <div className="home-content">
-        <div className="d-flex justify-content-between align-items-end w-100">
-          <div></div>
+        <Box sx={{ display: "flex", justifyContent: "space-between", flexDirection: { xs: "column", sm: "row", md: "row" }, gap: "1rem", marginLeft: "1rem" }}>
+          <div style={{ display: "flex" }}>
+            <Button variant="outlined"
+              sx={{ marginRight: "1rem", color: "#58aff6", fontWeight: "bold", border: "2px solid" }}
+              onClick={handleDownload}
+            >
+              <DownloadOutlinedIcon /> {t("Download Excel")}
+            </Button>
+
+            <Button variant="outlined"
+              sx={{ color: "#0058aa", fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
+              onClick={downloadFile}
+            >
+              <UploadOutlinedIcon /> {t("Sample")}
+            </Button>
+
+          </div>
           <div className="d-flex gap-2">
             <Button
-              variant="contained"
-              sx={{ marginRight: "5.5rem" }}
+              variant="outlined"
               onClick={() => setFilterOpen(!filterOpen)}
+              sx={{ color: "#f89a74", fontWeight: "bold", border: "2px solid", marginRight: "1rem" }}
             >
-              Filter
+              <FilterAltOutlinedIcon /> {t("Filter")}
             </Button>
           </div>
-        </div>
+        </Box>
 
         {filterOpen && (
-          <div className="teamMainBox">
-            <Box className="card m-3 p-3 mb-3 d-flex justify-content-between">
-              <div className="d-flex gap-4">
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={statusOption}
-                  sx={{ width: 300 }}
-                  onChange={(e, newValue) => setStatus(newValue)}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Status" />
-                  )}
-                />
+          <Box className="card m-3 p-3 mb-3 d-flex justify-content-between" sx={{ background: "#ffe7eb", borderRadius: "5px" }}>
+            <div className="d-flex gap-4">
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={statusOption}
+                sx={{ width: 300, background: "#fff" }}
+                onChange={(e, newValue) => setStatus(newValue)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Status" />
+                )}
+              />
 
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={signStatusOption}
-                  sx={{ width: 300 }}
-                  onChange={(e, newValue) => setSignStatus(newValue)}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Sign Status" />
-                  )}
-                />
-              </div>
-            </Box>
-          </div>
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={signStatusOption}
+                sx={{ width: 300, background: "#fff" }}
+                onChange={(e, newValue) => setSignStatus(newValue)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Sign Status" />
+                )}
+              />
+            </div>
+          </Box>
         )}
 
-        <div className="teamMainBox">
-          {error && error.message ? (
-            <h2 className="text-danger text-center">{error.message}</h2>
-          ) : (
-            ""
-          )}
-          <div className="card m-3 p-3">
-            <div className="mb-3 d-flex align-items-center justify-content-between">
-              <h4 className="m-0">{t("Distributor")}</h4>
+        <Box sx={{ display: "flex", justifyContent: "end", flexDirection: { xs: "column", sm: "row", md: "row" }, gap: "1rem", mt: 2, px: 2 }}>
+          <TextField
+            size="small"
+            placeholder="Search"
+            onChange={(e) => setSearch(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              width: "80%",
+              "& .MuiOutlinedInput-root": {
+                border: "2px solid #ffe7eb",
+                borderRadius: "5px",
+                boxShadow: "0 0 10px 5px #f7f3f4",
+                "& fieldset": {
+                  border: "none",
+                },
+              },
+            }}
+          />
 
-              <div className="d-flex">
-                <button
-                  className="btn btn-sm btn-primary me-2 px-3"
-                  onClick={downloadFile}
-                >
-                  <DownloadTwoTone />
-                </button>
-                <button
-                  className="btn btn-sm btn-primary me-2 px-3 py-0"
-                  onClick={handleDownload}
-                >
-                  Download Excel
-                </button>
-                <input
-                  type="file"
-                  accept=".csv"
-                  className="form-control"
-                  onChange={handleCSVInputChange}
-                />
-                <LoadingButton
-                  className="ms-2 px-3"
-                  variant="contained"
-                  loading={loading}
-                  onClick={_handleCSVToUser}
-                >
-                  Submit
-                </LoadingButton>
-              </div>
-            </div>
+          <Box sx={{ display: "flex", gap: "1rem" }}>
+            <input
+              type="file"
+              accept=".csv"
+              className="form-control"
+              onChange={handleCSVInputChange}
+            />
+            <LoadingButton
+              variant="contained"
+              onClick={_handleCSVToUser}
+            >
+              {t("Submit")}
+            </LoadingButton>
+          </Box>
+        </Box>
+
+        <div>
+          <div className="card m-3">
             <Box sx={{ height: "auto", width: "100%" }}>
               <DataGrid
                 rows={distributors}

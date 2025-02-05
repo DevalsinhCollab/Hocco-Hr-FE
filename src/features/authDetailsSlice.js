@@ -35,8 +35,8 @@ export const googlelogin = createAsyncThunk(
   }
 );
 
-export const LoginAdmin = createAsyncThunk(
-  "LoginAdmin",
+export const login = createAsyncThunk(
+  "login",
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post(
@@ -167,6 +167,23 @@ export const getAllAdharDataForExcel = createAsyncThunk(
   }
 );
 
+export const switchCompany = createAsyncThunk(
+  "switchCompany",
+  async (data, { rejectWithValue }) => {
+
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_API}/auth/switchCompany/${data.id}`,
+        data
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const authDetail = createSlice({
   name: "authDetail",
   initialState: {
@@ -188,15 +205,15 @@ export const authDetail = createSlice({
       state.error = action.payload;
     },
 
-    [LoginAdmin.pending]: (state) => {
+    [login.pending]: (state) => {
       state.loading = true;
     },
-    [LoginAdmin.fulfilled]: (state, action) => {
-      state.auth = action.payload.otherData;
+    [login.fulfilled]: (state, action) => {
+      state.auth = action.payload.data;
       state.loading = false;
       state.error = null;
     },
-    [LoginAdmin.rejected]: (state, action) => {
+    [login.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

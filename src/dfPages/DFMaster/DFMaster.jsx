@@ -230,14 +230,14 @@ export default function DFMaster(props) {
               sx={{ marginRight: "1rem", color: "#58aff6", fontWeight: "bold", border: "2px solid" }}
               onClick={handleDownload}
             >
-              <DownloadOutlinedIcon /> Download Excel
+              <DownloadOutlinedIcon /> {t("Download Excel")}
             </Button>
 
             <Button variant="outlined"
               sx={{ color: "#0058aa", fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
               onClick={downloadFile}
             >
-              <UploadOutlinedIcon /> Sample
+              <UploadOutlinedIcon /> {t("Sample")}
             </Button>
 
           </div>
@@ -247,7 +247,7 @@ export default function DFMaster(props) {
               onClick={() => setFilterOpen(!filterOpen)}
               sx={{ color: "#f89a74", fontWeight: "bold", border: "2px solid", marginRight: "1rem" }}
             >
-              <FilterAltOutlinedIcon /> Filter
+              <FilterAltOutlinedIcon /> {t("Filter")}
             </Button>
           </div>
         </Box>
@@ -323,7 +323,7 @@ export default function DFMaster(props) {
               variant="contained"
               onClick={_handleCSVToUser}
             >
-              Submit
+              {t("Submit")}
             </LoadingButton>
 
           </Box>

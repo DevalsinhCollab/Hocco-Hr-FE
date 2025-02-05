@@ -9,6 +9,9 @@ import { getCompanies } from "../../features/CompanyDetailSlice";
 import { updateUser } from "../../features/authDetailsSlice";
 import { getDashboardCount } from "../../features/dashboardSlice";
 import Logo from "../../../public/Images/logo.png";
+import Logosmall from "../../../public/Images/logo_small.png";
+import CompaniesLogo from "../../../public/Images/Companies.png"
+import LogoutLogo from "../../../public/Images/logout.png"
 
 const Sidebar = (props) => {
   const { isNavbarClose } = props;
@@ -16,9 +19,6 @@ const Sidebar = (props) => {
   const { t } = useTranslation();
   const location = useLocation();
   const dispatch = useDispatch();
-
-  console.log(location, "location======");
-  
 
   const { auth } = useSelector((state) => state.authData);
   const { companies } = useSelector((state) => state.companyData);
@@ -77,9 +77,9 @@ const Sidebar = (props) => {
 
   return (
     <div className={`sidebar ${isNavbarClose ? "sidebar-close" : ""}`}>
-      <div className="logo-details">
+      <div className="logo-details" style={{ background: "#cf1042" }}>
         <span className="logo_name">
-          <img src={Logo} alt="Logo" />
+          <img src={isNavbarClose ? Logosmall : Logo} alt="Logo" />
         </span>
       </div>
 
@@ -90,8 +90,16 @@ const Sidebar = (props) => {
           aria-labelledby="nested-list-subheader"
         >
           <ListItemButton onClick={handleClick} sx={{ bgcolor: "#d51245" }} className="company">
-            <ListItemText primary="Companies" />
-            {open ? <ExpandLess /> : <ExpandMore />}
+            {
+              isNavbarClose ?
+                <img src={CompaniesLogo} style={{ display: "flex", alignItems: "center", justifyContent: "center", marginLeft: isNavbarClose && "0.8rem" }} />
+                :
+                <>
+                  <img src={CompaniesLogo} style={{ display: "flex", alignItems: "center", justifyContent: "center", marginRight: "1rem" }} />
+                  <ListItemText primary={t("Companies")} />
+                  {open ? <ExpandLess /> : <ExpandMore />}
+                </>
+            }
           </ListItemButton>
           <Collapse in={open} timeout="auto" unmountOnExit>
             {companies &&
@@ -118,7 +126,7 @@ const Sidebar = (props) => {
               onMouseLeave={handleMouseLeave}
               style={{ margin: "5px 0px", display: "flex", padding: "0px 20px" }}
             >
-              <img src={item.activeLink.includes(location.pathname) || hoveredIndex == index ? item.activeIcon : item.icon} style={{ marginRight: "1rem" }} />
+              <img src={item.activeLink.includes(location.pathname) || hoveredIndex == index ? item.activeIcon : item.icon} style={{ marginRight: "1rem", marginLeft: isNavbarClose && "0.5rem" }} />
 
               {!isNavbarClose &&
                 <span
@@ -160,11 +168,9 @@ const Sidebar = (props) => {
             )}
           </li>
         ))}
-        <li className="log_out text-light" onClick={_handleLogoutBtn}>
-          <Link>
-            <i className="bx bx-log-out"></i>
-            <span className="links_name">Log out</span>
-          </Link>
+        <li className="log_out text-light" onClick={_handleLogoutBtn} style={{ marginLeft: "2rem", cursor: "pointer" }}>
+          <img src={LogoutLogo} />
+          <span className="links_name" style={{ marginLeft: "1rem", color: "#d81346" }}>Log out</span>
         </li>
       </ul>
     </div>

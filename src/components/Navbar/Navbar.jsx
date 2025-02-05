@@ -6,6 +6,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { titleArray } from "../../utils/utils";
 import LanguageIcon from "../../../public/Images/language.png"
+import { Button } from "@mui/material";
+import SwitchCompany from "../Modal/SwitchCompany";
+import SidebarLogo from "../../../public/Images/Sidebar.png"
 
 const Navbar = (props) => {
   const { toggleNavbar } = props;
@@ -17,6 +20,7 @@ const Navbar = (props) => {
 
   const [imageSrc, setImageSrc] = useState(null);
   const [title, setTitle] = useState("")
+  const [open, setOpen] = useState("")
 
   useEffect(() => {
     if (auth?.empImgBase64) {
@@ -35,23 +39,27 @@ const Navbar = (props) => {
   };
 
   useEffect(() => {
-    let mainTitle = titleArray.find((item) => location.pathname.includes(item.link)).title
+    let mainTitle = titleArray && titleArray.find((item) => location.pathname.includes(item.link)) && titleArray.find((item) => location.pathname.includes(item.link)).title
     setTitle(mainTitle)
   }, [location])
 
   return (
-    <nav>
+    <nav style={{ background: "#cf1042", color: "#fff" }}>
       <div className="sidebar-button" onClick={toggleNavbar}>
-        <i className="bx bx-menu sidebarBtn"></i>
-        <span className="dashboard">{title !== "" ? t(title) : ""}</span>
+        <img src={SidebarLogo} style={{ marginRight: "1rem", cursor: "pointer" }} />
+        <span className="dashboard">{title && title !== "" ? t(title) : ""}</span>
       </div>
 
       <Dropdown className="d-flex align-items-center gap-3">
+        {auth && auth.isSuperAdmin &&
+          <Button onClick={() => setOpen(true)} sx={{ color: "#fff", background: "#2c2b7e" }}>{t("Switch Company")}</Button>
+        }
+
         <Dropdown>
           <Dropdown.Toggle
             style={{
               backgroundColor: "#ffffff",
-              border: "2px solid #efeef1",
+              border: "2px solid #1c1b6c",
               borderRadius: "9999px",
             }}
           >
@@ -90,12 +98,14 @@ const Navbar = (props) => {
             style={{ borderRadius: "999pc" }}
           />
           <span className="admin_name">{auth && auth.name}</span>
-          <i className="bx bx-chevron-down"></i>
+          {/* <i className="bx bx-chevron-down"></i> */}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item href="#" onClick={_handleLogoutBtn}>Logout</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
+
+      <SwitchCompany open={open} setOpen={setOpen} />
     </nav>
   );
 };

@@ -7,10 +7,12 @@ import { getChallan } from "../../features/DelieverychallanSlice";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import { useTranslation } from "react-i18next";
 
 export default function DCTable() {
   const dispatch = useDispatch();
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -170,7 +172,7 @@ export default function DCTable() {
           onClick={() => navigate("/deliverychallan/add")}
           sx={{ color: "#f89a74", fontWeight: "bold", border: "2px solid", marginBottom: "1rem" }}
         >
-          Add Delivery Challan
+          {t("Add Delivery Challan")}
         </Button>
       </Box>
 

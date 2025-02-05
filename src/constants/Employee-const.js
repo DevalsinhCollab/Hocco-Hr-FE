@@ -1,4 +1,6 @@
 export const statusOption = [
+  { label: "Pending", value: "Pending" },
+  { label: "Unsent", value: "Unsent" },
   { label: "Sent", value: "Sent" },
   { label: "Completed", value: "Completed" },
 ];

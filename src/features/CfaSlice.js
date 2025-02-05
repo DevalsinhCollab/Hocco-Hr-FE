@@ -28,6 +28,7 @@ export const getAllCfas = createAsyncThunk(
             page: data.page,
             status: data.status,
             signStatus: data.signStatus,
+            search: data.search
           },
         }
       );

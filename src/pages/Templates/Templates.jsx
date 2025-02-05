@@ -10,10 +10,13 @@ import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from "@mui/icons-material/Edit";
 import LaptopIcon from '@mui/icons-material/Laptop';
+import { useTranslation } from "react-i18next";
 
 export default function Templates() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const { templates, totalCount } = useSelector((state) => state.templateData);
   const [newModal, setNewModal] = useState(false);
   const [search, setSearch] = useState("");
@@ -152,7 +155,7 @@ export default function Templates() {
             onClick={() => navigate("/templates/add")}
             sx={{ color: "#f89a74", fontWeight: "bold", border: "2px solid", marginRight: "1rem" }}
           >
-            <LaptopIcon style={{ marginRight: "0.5rem" }} /> Add - Customize Template
+            <LaptopIcon style={{ marginRight: "0.5rem" }} />{t("Add - Customize Template")}
           </Button>
         </Box>
 

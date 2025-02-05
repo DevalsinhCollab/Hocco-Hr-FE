@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import DashCard from "../../components/DashCard/DashCard";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { dfDashboard, getDashboardCount } from "../../features/dashboardSlice";
+import { dfDashboard, disDashboard, getDashboardCount } from "../../features/dashboardSlice";
 import EmployeeIcon from "../../../public/Images/Employee.png"
 import DocumentIcon from "../../../public/Images/Document.png"
 import SignedIcon from "../../../public/Images/Signed.png"
@@ -20,20 +20,21 @@ import CircleIcon from "@mui/icons-material/Circle";
 import { EmployeeStatusColorHelper, EmployeeStatusDotColorHelper } from "../../constants/Employee-const";
 import moment from "moment/moment";
 import { getLatestCustomers } from "../../features/customerDetailSlice";
+import { getLatestAssetTracker } from "../../features/AssetTrackerSlice";
 
 const DashboardScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { employeeCount, documentCount, signedCount, unSignedCount, inProgressCount, completedCount, dfCount, customerCount, agreementCount } = useSelector((state) => state.dashboardData)
+  const { employeeCount, documentCount, signedCount, unSignedCount, inProgressCount, completedCount, dfCount, customerCount, agreementCount, disCount, cfaCount, vrsCount, disTemplateCount } = useSelector((state) => state.dashboardData)
   const { latestDocuments, pendingDocuments } = useSelector((state) => state.documentData)
   const { latestCustomers } = useSelector((state) => state.customerData)
+  const { latestAssetTrackers } = useSelector((state) => state.assetTrackerData)
   const { auth } = useSelector((state) => state.authData);
 
   const [tableTitle, setTableTitle] = useState("")
   const [sideTableTitle, setSideTableTitle] = useState("")
-  const [column, setColumn] = useState(null)
   const [navigateTo, setNavigateTo] = useState("")
 
   const openPdf = (url) => {
@@ -130,49 +131,76 @@ const DashboardScreen = () => {
       headerClassName: 'red-header',
     },
     {
-      field: "assestSerialNumber",
-      headerName: "Assets Serial Number",
+      field: "custName",
+      headerName: "Customer Name",
       width: 250,
+      headerClassName: 'red-header',
+    },
+    {
+      field: "assetSerialNumber",
+      headerName: "Asset Sr. No.",
+      width: 200,
       headerClassName: 'red-header',
     },
     {
       field: "status",
       headerName: "Status",
-      width: 200,
+      width: 150,
       headerClassName: 'red-header',
-      renderCell: ({ row }) => {
-        return (
-          <>
-            <CircleIcon
-              sx={{
-                fontSize: "15px",
-                color: EmployeeStatusDotColorHelper[row.signType],
-              }}
-            />
-            <Button
-              color={EmployeeStatusColorHelper[row.signType]}
-              sx={{ textTransform: "capitalize" }}
-            >
-              {row && row.signType}
-            </Button>
-          </>
-        );
-      },
     },
     {
       field: "barCode",
-      headerName: "BarCode",
-      width: 290,
+      headerName: "Bar Code",
+      width: 150,
+      headerClassName: 'red-header',
+    },
+    {
+      field: "asmName",
+      headerName: "Asm Name",
+      width: 150,
+      headerClassName: 'red-header',
+    },
+    {
+      field: "asmEmail",
+      headerName: "Asm Email",
+      width: 220,
+      headerClassName: 'red-header',
+    },
+    {
+      field: "tsmVSEName",
+      headerName: "Tsm Name",
+      width: 150,
+      headerClassName: 'red-header',
+    },
+    {
+      field: "tsmVSEEmail",
+      headerName: "Tsm Email",
+      width: 220,
       headerClassName: 'red-header',
     },
     {
       field: "updatedAt",
       headerName: "Updated At",
-      width: 210,
+      width: 200,
       headerClassName: 'red-header',
+      valueFormatter: ({ value }) => {
+        const dateTime = moment(value).format("DD/MM/YYYY");
+
+        return dateTime !== "Invalid date" ? dateTime : value;
+      },
+    },
+    {
+      field: "createdAt",
+      headerName: "Created At",
+      width: 218,
+      headerClassName: 'red-header',
+      valueFormatter: ({ value }) => {
+        const dateTime = moment(value).format("DD/MM/YYYY");
+
+        return dateTime !== "Invalid date" ? dateTime : value;
+      },
     },
   ];
-
 
   const dashCards = [
     // DF
@@ -222,7 +250,7 @@ const DashboardScreen = () => {
       title: "Signed",
       count: signedCount,
       icon: SignedIcon,
-      link: "/signedDocs",
+      link: "/signed",
       borderColor: "#ffdfd2",
       role: ["AHR", "HR"],
     },
@@ -230,7 +258,7 @@ const DashboardScreen = () => {
       title: "Unsigned",
       count: unSignedCount,
       icon: UnsignedIcon,
-      link: "/unSignedDocs",
+      link: "/unsigned",
       borderColor: "#bcdaf6",
       role: ["AHR", "HR"],
     },
@@ -238,58 +266,42 @@ const DashboardScreen = () => {
       title: "Completed",
       count: completedCount,
       icon: CompletedIcon,
-      link: "/completedDocs",
+      link: "/completed",
       borderColor: "#cee2f4",
       role: ["AHR", "HR"],
     },
 
     // Dis
     {
-      title: "Total Distributor",
-      count: employeeCount,
+      title: "Distributor",
+      count: disCount,
       icon: EmployeeIcon,
-      link: "/employees",
+      link: "/distributor",
       borderColor: "#fde8ed",
       role: ["Dis"],
     },
     {
-      title: "Total CFA",
-      count: documentCount,
+      title: "CFA (S)",
+      count: cfaCount,
       icon: DocumentIcon,
-      link: "/documents",
+      link: "/cfa",
       borderColor: "#e4e3fe",
       role: ["Dis"],
     },
     {
-      title: "Total VRS",
-      count: signedCount,
+      title: "VRS (S)",
+      count: vrsCount,
       icon: SignedIcon,
-      link: "/signedDocs",
+      link: "/vrs",
       borderColor: "#ffdfd2",
       role: ["Dis"],
     },
     {
-      title: "Unsigned",
-      count: unSignedCount,
+      title: "Documents",
+      count: disTemplateCount,
       icon: UnsignedIcon,
-      link: "/unSignedDocs",
+      link: "/disDocuments",
       borderColor: "#bcdaf6",
-      role: ["Dis"],
-    },
-    {
-      title: "Signed",
-      count: unSignedCount,
-      icon: UnsignedIcon,
-      link: "/unSignedDocs",
-      borderColor: "#bcdaf6",
-      role: ["Dis"],
-    },
-    {
-      title: "Completed",
-      count: completedCount,
-      icon: CompletedIcon,
-      link: "/completedDocs",
-      borderColor: "#cee2f4",
       role: ["Dis"],
     },
   ]
@@ -298,10 +310,13 @@ const DashboardScreen = () => {
     if (auth && auth.userType && ["A"].includes(auth.userType)) {
       dispatch(dfDashboard())
       dispatch(getLatestCustomers())
+      dispatch(getLatestAssetTracker())
     } else if (auth && auth.userType && ["AHR", "HR"].includes(auth.userType)) {
       dispatch(getLatestDocuments())
       dispatch(getPendingDocuments())
       dispatch(getDashboardCount())
+    } else {
+      dispatch(disDashboard())
     }
   }, [auth])
 
@@ -313,11 +328,13 @@ const DashboardScreen = () => {
   useEffect(() => {
     if (auth && auth.userType && ["A"].includes(auth.userType)) {
       setTableTitle("Latest Asset Trackers")
-      setSideTableTitle("Latest Customer")
+      setSideTableTitle("Latest Customers")
       setNavigateTo("/assetstracker")
-      setColumn(assetColumn)
-    } else {
-      setColumn(documentColumn)
+    } else if (auth && auth.userType && ["Dis"].includes(auth.userType)) {
+      setSideTableTitle("Latest Documents")
+    }
+    else {
+      setTableTitle("Latest Documents")
       setSideTableTitle("Pending Documents")
       setNavigateTo("/dashboard")
     }
@@ -343,20 +360,22 @@ const DashboardScreen = () => {
                 ))}
             </div>
 
-            <div className="m-3 p-3 tableDiv" style={{ border: "2px solid #ffe7eb", borderRadius: "10px", boxShadow: " 0 0 10px 5px #f7f3f4" }}>
-              <Box sx={{ height: "auto", width: "100%" }}>
-                <div className="mb-3 d-flex align-items-center justify-content-between">
-                  <h4 className="m-0" style={{ color: "#1c1b6c", fontWeight: "bold" }}>{t(tableTitle)}</h4>
-                  <Button variant="outlined" onClick={() => navigate(navigateTo)}>Visit</Button>
-                </div>
-                <DataGrid
-                  rows={latestDocuments}
-                  columns={assetColumn}
-                  getRowId={(e) => e._id}
-                  hideFooter
-                />
-              </Box>
-            </div>
+            {auth && auth.userType && !["Dis"].includes(auth.userType) &&
+              <div className="m-3 p-3 tableDiv" style={{ border: "2px solid #ffe7eb", borderRadius: "10px", boxShadow: " 0 0 10px 5px #f7f3f4" }}>
+                <Box sx={{ height: "auto", width: "100%" }}>
+                  <div className="mb-3 d-flex align-items-center justify-content-between">
+                    <h4 className="m-0" style={{ color: "#1c1b6c", fontWeight: "bold" }}>{t(tableTitle)}</h4>
+                    <Button variant="outlined" onClick={() => navigate(navigateTo)}>{t("Visit")}</Button>
+                  </div>
+                  <DataGrid
+                    rows={["A"].includes(auth.userType) ? latestAssetTrackers : latestDocuments || []}
+                    columns={["A"].includes(auth.userType) ? assetColumn : documentColumn}
+                    getRowId={(e) => e._id}
+                    hideFooter
+                  />
+                </Box>
+              </div>
+            }
           </div>
 
           <div className="right-side">

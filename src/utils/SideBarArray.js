@@ -207,8 +207,8 @@ export const sideBarArray = [
   {
     id: generateRandomId(),
     title: "Documents",
-    link: "/distributorDocuments",
-    activeLink: ["/distributorDocuments"],
+    link: "/disDocuments",
+    activeLink: ["/disDocuments"],
     activeIcon: DocumentActiveIcon,
     icon: DocumentIcon,
     role: ["Dis"],

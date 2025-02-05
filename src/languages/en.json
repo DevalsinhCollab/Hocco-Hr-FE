@@ -39,5 +39,15 @@
   "IGST Rate": "IGST Rate",
   "IGST Amount": "IGST Amount",
   "Action": "Action",
-  "Aadhar Data": "Aadhar Data"
+  "Aadhar Data": "Aadhar Data",
+  "CFA": "CFA",
+  "VRS": "VRS",
+  "Documents": "Documents",
+  "Latest Documents": "Latest Documents",
+  "Switch Company": "Switch Company",
+  "Download Excel": "Download Excel",
+  "Sample": "Sample",
+  "Filter": "Filter",
+  "Submit": "Submit",
+  "Refresh": "Refresh"
 }

@@ -22,10 +22,12 @@ import EditIcon from "../../../public/Images/EditIcon.png"
 import ViewIcon from "../../../public/Images/ViewIcon.png"
 import { useNavigate } from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
+import { useTranslation } from "react-i18next";
 
 export default function Customers() {
   const dispatch = useDispatch();
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const {
     customers,
@@ -198,14 +200,14 @@ export default function Customers() {
               sx={{ marginRight: "1rem", color: "#58aff6", fontWeight: "bold", border: "2px solid" }}
               onClick={handleDownload}
             >
-              <DownloadOutlinedIcon /> Download Excel
+              <DownloadOutlinedIcon /> {t("Download Excel")}
             </Button>
 
             <Button variant="outlined"
               sx={{ color: "#0058aa", fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
               onClick={downloadFile}
             >
-              <UploadOutlinedIcon /> Sample
+              <UploadOutlinedIcon /> {t("Sample")}
             </Button>
 
           </div>
@@ -215,7 +217,7 @@ export default function Customers() {
               onClick={() => setFilterOpen(!filterOpen)}
               sx={{ color: "#f89a74", fontWeight: "bold", border: "2px solid", marginRight: "1rem" }}
             >
-              <FilterAltOutlinedIcon /> Filter
+              <FilterAltOutlinedIcon /> {t("Filter")}
             </Button>
           </div>
         </Box>
@@ -235,29 +237,29 @@ export default function Customers() {
         )}
 
         <Box sx={{ display: "flex", justifyContent: "end", flexDirection: { xs: "column", sm: "row", md: "row" }, gap: "1rem", mt: 2, px: 2 }}>
-        <TextField
-          size="small"
-          placeholder="Search"
-          onChange={(e) => setSearch(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          sx={{
-            width: "80%",
-            "& .MuiOutlinedInput-root": {
-              border: "2px solid #ffe7eb",
-              borderRadius: "5px",
-              boxShadow: "0 0 10px 5px #f7f3f4",
-              "& fieldset": {
-                border: "none",
+          <TextField
+            size="small"
+            placeholder="Search"
+            onChange={(e) => setSearch(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              width: "80%",
+              "& .MuiOutlinedInput-root": {
+                border: "2px solid #ffe7eb",
+                borderRadius: "5px",
+                boxShadow: "0 0 10px 5px #f7f3f4",
+                "& fieldset": {
+                  border: "none",
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
 
           <Box sx={{ display: "flex", gap: "1rem" }}>
             <input
@@ -270,9 +272,8 @@ export default function Customers() {
               variant="contained"
               onClick={_handleCSVToUser}
             >
-              Submit
+              {t("Submit")}
             </LoadingButton>
-
           </Box>
         </Box>
 

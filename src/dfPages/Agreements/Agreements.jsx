@@ -175,7 +175,7 @@ export default function Agreements() {
             sx={{ marginRight: "1rem", color: "#58aff6", fontWeight: "bold", border: "2px solid" }}
             onClick={handleDownload}
           >
-            <DownloadOutlinedIcon /> Download Excel
+            <DownloadOutlinedIcon /> {t("Download Excel")}
           </Button>
         </Box>
 

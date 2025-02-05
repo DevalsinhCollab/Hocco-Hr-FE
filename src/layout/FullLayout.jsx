@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Navbar from "../components/Navbar/Navbar";
 
 const FullLayout = ({ Component }) => {
-  const [isNavbarClose, setIsNavbarClose] = useState(false);
+  const [isNavbarClose, setIsNavbarClose] = useState(window.innerWidth <= 1024);
 
   const toggleNavbar = () => {
     setIsNavbarClose(!isNavbarClose);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsNavbarClose(window.innerWidth <= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <>

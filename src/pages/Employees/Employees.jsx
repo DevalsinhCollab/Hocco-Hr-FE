@@ -31,10 +31,12 @@ import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Employees() {
   const dispatch = useDispatch();
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const { employees, totalCount } = useSelector((state) => state.employeeData)
 
@@ -118,7 +120,7 @@ export default function Employees() {
               aria-expanded={open ? 'true' : undefined}
               onClick={(event) => handleClick(event, params)}
             >
-              <MoreVertIcon sx={{color: "#838383"}} />
+              <MoreVertIcon sx={{ color: "#838383" }} />
             </Button>
 
             <Menu
@@ -306,14 +308,14 @@ export default function Employees() {
               sx={{ marginRight: "1rem", color: "#58aff6", fontWeight: "bold", border: "2px solid" }}
               onClick={handleDownload}
             >
-              <DownloadOutlinedIcon /> Download Excel
+              <DownloadOutlinedIcon /> {t("Download Excel")}
             </Button>
 
             <Button variant="outlined"
               sx={{ color: "#0058aa", fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
               onClick={downloadFile}
             >
-              <UploadOutlinedIcon /> Sample
+              <UploadOutlinedIcon /> {t("Sample")}
             </Button>
 
           </div>
@@ -323,7 +325,7 @@ export default function Employees() {
               onClick={() => setFilterOpen(!filterOpen)}
               sx={{ color: "#f89a74", fontWeight: "bold", border: "2px solid" }}
             >
-              <FilterAltOutlinedIcon /> Filter
+              <FilterAltOutlinedIcon /> {t("Filter")}
             </Button>
 
             <Button
@@ -331,7 +333,7 @@ export default function Employees() {
               sx={{ marginRight: "1rem", fontWeight: "bold" }}
               onClick={handleAddEmployee}
             >
-              Add Employee
+              {t("Add Employee")}
             </Button>
           </div>
         </Box>
@@ -410,7 +412,7 @@ export default function Employees() {
               variant="contained"
               onClick={_handleCSVToUser}
             >
-              Submit
+              {t("Submit")}
             </LoadingButton>
 
           </Box>

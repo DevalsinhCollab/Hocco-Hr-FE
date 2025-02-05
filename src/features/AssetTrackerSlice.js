@@ -394,6 +394,23 @@ export const checkAllUnSignedDocs = createAsyncThunk(
   }
 );
 
+export const getLatestAssetTracker = createAsyncThunk(
+  "getLatestAssetTracker",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_API
+        }/AssetTracker/getLatestAssetTracker`,
+        getApisHeaders()
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const assetsTrackerDetails = createSlice({
   name: "assetsTrackerDetails",
   initialState: {
@@ -403,6 +420,7 @@ export const assetsTrackerDetails = createSlice({
     assetsTrackerDetails: {},
     allAgreements: [],
     assetsTrackerWithoutAggregate: [],
+    latestAssetTrackers: [],
     totalCount: 0,
   },
   reducers: {},
@@ -490,6 +508,18 @@ export const assetsTrackerDetails = createSlice({
       state.loading = false;
     },
     [checkAllUnSignedDocs.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.data;
+    },
+
+    [getLatestAssetTracker.pending]: (state) => {
+      state.loading = true;
+    },
+    [getLatestAssetTracker.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.latestAssetTrackers = action.payload.data
+    },
+    [getLatestAssetTracker.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.data;
     },

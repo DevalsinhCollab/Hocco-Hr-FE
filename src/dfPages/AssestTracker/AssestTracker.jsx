@@ -27,6 +27,7 @@ import ViewIcon from "../../../public/Images/ViewIcon.png"
 
 export default function AssetsTracker() {
   const dispatch = useDispatch();
+  const { t } = useTranslation()
   const { assetsTracker, totalCount } = useSelector(
     (state) => state.assetTrackerData
   );
@@ -288,7 +289,7 @@ export default function AssetsTracker() {
               sx={{ color: "#0058aa", fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
               onClick={handleRefresh}
             >
-              Refresh
+              {t("Refresh")}
             </Button>
 
             <Button
@@ -296,7 +297,8 @@ export default function AssetsTracker() {
               onClick={() => setFilterOpen(!filterOpen)}
               sx={{ color: "#f89a74", fontWeight: "bold", border: "2px solid", marginRight: "1rem" }}
             >
-              <FilterAltOutlinedIcon /> Filter
+              <FilterAltOutlinedIcon /> {t("Filter")}
+
             </Button>
           </div>
         </Box>

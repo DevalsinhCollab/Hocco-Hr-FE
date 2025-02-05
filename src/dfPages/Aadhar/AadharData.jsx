@@ -8,9 +8,11 @@ import { downloadAdharExcel } from "../../utils/utils";
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export default function AadharData() {
   const dispatch = useDispatch();
+  const { t } = useTranslation()
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -134,7 +136,7 @@ export default function AadharData() {
           sx={{ color: "#58aff6", fontWeight: "bold", border: "2px solid" }}
           onClick={handleDownload}
         >
-          <DownloadOutlinedIcon /> Download Excel
+          <DownloadOutlinedIcon />{t("Download Excel")}
         </Button>
       </Box>
 

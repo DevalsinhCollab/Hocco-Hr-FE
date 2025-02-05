@@ -7,8 +7,7 @@ export const addMultiDistributor = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${
-          import.meta.env.VITE_BACKEND_API
+        `${import.meta.env.VITE_BACKEND_API
         }/distributor/createmultidistributor`,
         data
       );
@@ -30,6 +29,7 @@ export const getAllDistributors = createAsyncThunk(
             page: data.page,
             status: data.status,
             signStatus: data.signStatus,
+            search: data.search
           },
         }
       );
@@ -48,8 +48,7 @@ export const deleteDistributor = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${
-          import.meta.env.VITE_BACKEND_API
+        `${import.meta.env.VITE_BACKEND_API
         }/distributor/deleteDistributor/${data}`
       );
       return response.data;
@@ -79,8 +78,7 @@ export const updateDistributor = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_API}/distributor/updateDistributor/${
-          data.id
+        `${import.meta.env.VITE_BACKEND_API}/distributor/updateDistributor/${data.id
         }`,
         data
       );
@@ -96,10 +94,39 @@ export const DistributorExcelDownload = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${
-          import.meta.env.VITE_BACKEND_API
+        `${import.meta.env.VITE_BACKEND_API
         }/distributor/handleDistributorExcelDownload`,
         data
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const searchDistributors = createAsyncThunk(
+  "searchDistributors",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}/distributor/searchDistributors`,
+        data,
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const createDocForSignDocuments = createAsyncThunk(
+  "createDocForSignDocuments",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}/distributor/createDocForSignDocuments`,
+        data,
       );
       return response.data;
     } catch (error) {
@@ -192,6 +219,17 @@ export const distributorDetails = createSlice({
       state.loading = false;
     },
     [DistributorExcelDownload.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    
+    [createDocForSignDocuments.pending]: (state) => {
+      state.loading = true;
+    },
+    [createDocForSignDocuments.fulfilled]: (state, action) => {
+      state.loading = false;
+    },
+    [createDocForSignDocuments.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

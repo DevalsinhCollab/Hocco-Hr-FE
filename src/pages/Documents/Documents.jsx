@@ -21,10 +21,12 @@ import { useLocation } from "react-router-dom";
 import { SignTypeOption } from "../../utils/utils";
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import { useTranslation } from "react-i18next";
 
 export default function Documents() {
   const dispatch = useDispatch();
   const location = useLocation()
+  const { t } = useTranslation()
 
   const { documents, totalCount } = useSelector(state => state.documentData)
 
@@ -56,6 +58,8 @@ export default function Documents() {
 
     if (["/completed"].includes(location.pathname)) {
       setStatus({ label: "Completed", value: "Completed" })
+    } else {
+      setStatus(null)
     }
 
     setFilterOpen(false)
@@ -77,7 +81,7 @@ export default function Documents() {
 
   useEffect(() => {
     callApi();
-  }, [page, pageSize, search, status, signStatus, signType]);
+  }, [page, pageSize, search, status, signStatus, signType, location]);
 
   const openPdf = (url) => {
     if (url) {
@@ -205,7 +209,7 @@ export default function Documents() {
               onClick={() => setFilterOpen(!filterOpen)}
               sx={{ color: "#f89a74", fontWeight: "bold", border: "2px solid" }}
             >
-              <FilterAltOutlinedIcon /> Filter
+              <FilterAltOutlinedIcon /> {t("Filter")}
             </Button>
 
             {["/documents"].includes(location.pathname) &&
@@ -214,7 +218,7 @@ export default function Documents() {
                 onClick={handleAddDocuments}
                 style={{ background: "#0058aa" }}
               >
-                ADD DOCUMENT
+                {t("ADD DOCUMENT")}
               </button>
             }
           </div>

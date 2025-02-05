@@ -170,7 +170,7 @@ export const routesArray = [
   },
   {
     id: generateRandomId(),
-    link: "/distributorDocuments",
+    link: "/disDocuments",
     component: DistributorDocuments,
     role: ["Dis"],
   },

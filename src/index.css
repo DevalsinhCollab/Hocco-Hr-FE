@@ -13,11 +13,10 @@
   width: 240px;
   background: #ffffff;
   transition: all 0.5s ease;
-  border-right: 1.5px solid #d8d3d4;
 }
 
 .sidebar-close {
-  width: 80px !important;
+  width: 100px !important;
 }
 
 .sidebar-close~.home-section nav {
@@ -120,11 +119,11 @@
   width: calc(100% - 240px);
   left: 240px;
   transition: all 0.5s ease;
+  border-left: 1.5px solid #d8d3d4;
 }
 
 .sidebar.active~.home-section {
   width: calc(100% - 80px);
-  left: 80px;
 }
 
 .home-section nav {
@@ -198,8 +197,8 @@ nav .search-box .bx-search {
 .home-section nav .profile-details {
   display: flex;
   align-items: center;
-  background: #f5f6fa;
-  border: 2px solid #efeef1;
+  background: #cc0f40;
+  border: 2px solid #cc0f40;
   border-radius: 6px;
   height: 50px;
   min-width: 190px;
@@ -216,7 +215,7 @@ nav .profile-details img {
 nav .profile-details .admin_name {
   font-size: 15px;
   font-weight: 500;
-  color: #333;
+  color: #fff;
   margin: 0 10px;
   white-space: nowrap;
 }
@@ -251,13 +250,14 @@ nav .profile-details i {
 .overview-boxes .left-side .upperDiv {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
   margin-bottom: 1rem;
   margin-left: 1rem;
+  row-gap: 1rem;
+  column-gap: 1.5rem;
 }
 
 .overview-boxes .left-side .upperDiv .box {
-  width: 18rem;
+  width: 22.6rem;
   display: flex;
   align-items: center;
   background: #fff;
@@ -443,10 +443,9 @@ nav .profile-details i {
 }
 
 /* Responsive Media Query */
-@media (max-width: 1240px) {
+/* @media (max-width: 1240px) {
   .sidebar {
-    width: 80px;
-    margin-left: -4px !important;
+    width: 80px !important;
   }
 
   .sidebar.active {
@@ -468,7 +467,7 @@ nav .profile-details i {
     width: calc(100% - 70px);
     left: 70px;
   }
-}
+} */
 
 @media (max-width: 1150px) {
   .home-content .sales-boxes {

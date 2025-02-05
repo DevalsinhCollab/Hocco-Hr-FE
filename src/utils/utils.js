@@ -227,6 +227,8 @@ export const downloadDisExcel = (jsonData, userData) => {
       Birth: element.adhar,
       Adhar: element.birth,
       Gender: element.gender,
+      "Start Date": element.startDate,
+      "End Date": element.endDate
     };
     downloadData.push(innerData);
   });
@@ -247,6 +249,8 @@ export const downloadCfaExcel = (jsonData, userData) => {
       Birth: element.adhar,
       Adhar: element.birth,
       Gender: element.gender,
+      "Start Date": element.startDate,
+      "End Date": element.endDate
     };
     downloadData.push(innerData);
   });
@@ -267,6 +271,8 @@ export const downloadVrsExcel = (jsonData, userData) => {
       Birth: element.adhar,
       Adhar: element.birth,
       Gender: element.gender,
+      "Start Date": element.startDate,
+      "End Date": element.endDate
     };
     downloadData.push(innerData);
   });
@@ -311,12 +317,12 @@ export const titleArray = [
   },
   {
     id: generateRandomId(),
-    title: "Asset Master",
+    title: "Assets Master",
     link: "/assetsmaster",
   },
   {
     id: generateRandomId(),
-    title: "Asset Tracker",
+    title: "Assets Tracker",
     link: "/assetstracker",
   },
   {
@@ -408,11 +414,23 @@ export const titleArray = [
   {
     id: generateRandomId(),
     title: "Documents",
-    link: "/distributorDocuments",
+    link: "/disDocuments",
   },
 ];
 
 export const SignTypeOption = [
   { label: "Adhar", value: "adhar" },
   { label: "Dsc", value: "dsc" }
+]
+
+export const appTypes = [
+  { label: "Hocco DF", value: "A" },
+  { label: "Hocco HR", value: "AHR" },
+  { label: "Hocco Dis", value: "Dis" }
+]
+
+export const disTypeArray = [
+  { label: "Distributor", value: "dis" },
+  { label: "CFA", value: "cfa" },
+  { label: "VRS", value: "vrs" }
 ]

@@ -7,8 +7,6 @@ import { createTemplateForHtml, getTemplateById, updateTemplate } from "../../fe
 import { toast } from "react-toastify";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AddTemplateIcon from "../../../public/Images/AddTemplate.png"
-
-
 import JoditEditor from "jodit-react";
 
 // old
@@ -24,7 +22,7 @@ Quill.register("modules/better-table", QuillBetterTable);
 
 window.katex = katex;
 
-const AddTemplate = (props) => {
+const AddTemplate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const editor = useRef(null);
