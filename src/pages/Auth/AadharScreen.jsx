@@ -36,7 +36,7 @@ export default function AadharScreen() {
 
   useEffect(() => {
     async function CallCustomer() {
-      await dispatch(getCustomerById(cId));
+      await dispatch(getCustomerById({ id: cId }));
     }
 
     CallCustomer();
