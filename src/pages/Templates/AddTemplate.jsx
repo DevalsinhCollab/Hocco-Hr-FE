@@ -85,7 +85,7 @@ const AddTemplate = () => {
       let response = await dispatch(getTemplateById({ id: templateId }))
 
       if (response && response.type == "getTemplateById/fulfilled") {
-        setCompany({ label: response.payload.data.company.name, value: response.payload.data.company._id })
+        setCompany({ label: response && response.payload && response.payload.data && response.payload.data.company && response.payload.data.company.name, value: response && response.payload && response.payload.data && response.payload.data.company && response.payload.data.company._id })
         setTemplateName(response.payload.data.templateName)
         setText(response.payload.data.htmlTemplate)
       }

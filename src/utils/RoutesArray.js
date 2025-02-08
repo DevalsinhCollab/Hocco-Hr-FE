@@ -45,7 +45,7 @@ export const routesArray = [
     id: generateRandomId(),
     link: "/templates/edit/:id",
     component: AddTemplate,
-    role: ["AHR", "HR", ""],
+    role: ["AHR", "HR", "A", ""],
   },
 
   // Df Routes
@@ -97,7 +97,7 @@ export const routesArray = [
     component: AadharData,
     role: ["A"],
   },
- 
+
 
   // Hr Routes
   {
