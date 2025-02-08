@@ -36,6 +36,9 @@ export default function LoginScreen() {
         email: "",
         password: "",
       });
+      if (getData && getData.payload && getData.payload.data && getData.payload.data.company) {
+        localStorage.setItem("companyId", getData.payload.data.company);
+      }
       navigate("/dashboard");
     } else {
       toast(getData.payload.response.data.message);

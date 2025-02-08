@@ -116,7 +116,7 @@ const Sidebar = (props) => {
                 :
                 <>
                   <img src={CompaniesLogo} style={{ display: "flex", alignItems: "center", justifyContent: "center", marginRight: "1rem" }} />
-                  <ListItemText primary={currentCompany || ""} />
+                  <ListItemText primary={currentCompany || "Companies"} />
                   {open ? <ExpandLess /> : <ExpandMore />}
                 </>
             }

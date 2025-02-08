@@ -30,6 +30,10 @@ export default function SwitchCompany(props) {
 
         if (response && response.payload && response.payload.message) {
             toast.success(response.payload.message)
+
+            if (response && response.payload && response.payload.data && response.payload.data.company) {
+                localStorage.setItem("companyId", response.payload.data.company);
+            }
         }
 
         setOpen(false)
