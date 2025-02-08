@@ -21,6 +21,7 @@ const Navbar = (props) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [title, setTitle] = useState("")
   const [open, setOpen] = useState("")
+  const [currentApp, setCurrentApp] = useState("")
 
   useEffect(() => {
     if (auth?.empImgBase64) {
@@ -52,7 +53,8 @@ const Navbar = (props) => {
 
       <Dropdown className="d-flex align-items-center gap-3">
         {auth && auth.isSuperAdmin &&
-          <Button onClick={() => setOpen(true)} sx={{ color: "#fff", background: "#2c2b7e" }}>{t("Switch Company")}</Button>
+          // <Button onClick={() => setOpen(true)} sx={{ color: "#fff", background: "#2c2b7e" }}>{t("Switch Company")}</Button>
+          <Button onClick={() => setOpen(true)} sx={{ color: "#fff", background: "#2c2b7e" }}>{currentApp && currentApp.label}</Button>
         }
 
         <Dropdown>
@@ -105,7 +107,7 @@ const Navbar = (props) => {
         </Dropdown.Menu>
       </Dropdown>
 
-      <SwitchCompany open={open} setOpen={setOpen} />
+      <SwitchCompany open={open} setOpen={setOpen} setCurrentApp={setCurrentApp} />
     </nav>
   );
 };

@@ -13,7 +13,7 @@ import { switchCompany } from "../../features/authDetailsSlice";
 import { toast } from "react-toastify";
 
 export default function SwitchCompany(props) {
-    const { open, setOpen } = props;
+    const { open, setOpen, setCurrentApp } = props;
     const dispatch = useDispatch();
     const { auth } = useSelector((state) => state.authData);
 
@@ -45,6 +45,7 @@ export default function SwitchCompany(props) {
             let currentCompany = appTypes.find(item => item.value == auth.userType)
 
             setApp(currentCompany)
+            setCurrentApp(currentCompany)
         }
     }, [auth])
 

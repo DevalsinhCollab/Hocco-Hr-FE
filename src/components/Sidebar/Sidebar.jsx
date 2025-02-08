@@ -5,13 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { sideBarArray } from "../../utils/SideBarArray";
 import { Collapse, List, ListItemButton, ListItemText } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { getCompanies } from "../../features/CompanyDetailSlice";
+import { getCompanies, getCompanyById } from "../../features/CompanyDetailSlice";
 import { updateUser } from "../../features/authDetailsSlice";
 import { getDashboardCount } from "../../features/dashboardSlice";
 import Logo from "../../../public/Images/logo.png";
 import Logosmall from "../../../public/Images/logo_small.png";
 import CompaniesLogo from "../../../public/Images/Companies.png"
 import LogoutLogo from "../../../public/Images/logout.png"
+import { companyNameArray } from "../../utils/utils";
 
 const Sidebar = (props) => {
   const { isNavbarClose } = props;
@@ -25,6 +26,7 @@ const Sidebar = (props) => {
 
   const [activeMenu, setActiveMenu] = useState(null);
   const [open, setOpen] = useState(false);
+  const [currentCompany, setCurrentCompany] = useState("")
 
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [hoveredSubIndex, setHoveredSubIndex] = useState(null);
@@ -63,6 +65,24 @@ const Sidebar = (props) => {
     dispatch(getCompanies());
   }, []);
 
+  useEffect(() => {
+    let currentCompanyId = localStorage.getItem("companyId")
+
+    const callCompanyApi = async () => {
+
+      const response = await dispatch(getCompanyById({ id: currentCompanyId }))
+
+      if (response && response.payload && response.payload.data && response.payload.data.name) {
+        let companyName = companyNameArray?.find((item) => item?.value == response?.payload?.data?.name)?.label
+        setCurrentCompany(companyName)
+      }
+    }
+
+    callCompanyApi()
+
+  }, []);
+
+
   const handleGetCompany = (data) => {
     localStorage.setItem("companyId", data._id);
     dispatch(updateUser({ id: auth._id, company: data._id }));
@@ -96,7 +116,7 @@ const Sidebar = (props) => {
                 :
                 <>
                   <img src={CompaniesLogo} style={{ display: "flex", alignItems: "center", justifyContent: "center", marginRight: "1rem" }} />
-                  <ListItemText primary={t("Companies")} />
+                  <ListItemText primary={currentCompany || ""} />
                   {open ? <ExpandLess /> : <ExpandMore />}
                 </>
             }

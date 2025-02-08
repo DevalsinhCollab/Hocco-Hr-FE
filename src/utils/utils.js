@@ -434,3 +434,11 @@ export const disTypeArray = [
   { label: "CFA", value: "cfa" },
   { label: "VRS", value: "vrs" }
 ]
+
+export const companyNameArray = [
+  { label: "HIPL", value: "Hocco Industries Pvt Ltd" },
+  { label: "HRPL", value: "HRPL Restaurants Pvt Ltd" },
+  { label: "SIMPL", value: "SIMPL Innovative Brands Pvt Ltd" },
+  { label: "CC", value: "Chona Capital" },
+  { label: "HFCL", value: "Hocco Foods Pvt Ltd" },
+]

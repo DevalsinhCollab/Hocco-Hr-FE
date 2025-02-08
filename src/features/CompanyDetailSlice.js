@@ -17,10 +17,26 @@ export const getCompanies = createAsyncThunk(
     }
 );
 
+export const getCompanyById = createAsyncThunk(
+    "getCompanyById",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_API}/company/getCompanyById/${data.id}`);
+
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(
+                error.response ? error.response.data : error.message
+            );
+        }
+    }
+);
+
 export const companyDetails = createSlice({
     name: "companyDetails",
     initialState: {
         companies: [],
+        currentCompany: "",
         loading: false,
         error: null,
     },
