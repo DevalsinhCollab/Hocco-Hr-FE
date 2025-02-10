@@ -342,7 +342,7 @@ export default function Vrs() {
             </Button>
 
             <Button variant="outlined"
-              sx={{ color: "#0058aa", fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
+              sx={{ fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
               onClick={downloadFile}
             >
               <UploadOutlinedIcon /> {t("Sample")}

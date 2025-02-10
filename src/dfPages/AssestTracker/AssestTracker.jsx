@@ -23,7 +23,7 @@ import { toast } from "react-toastify";
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { Button, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
-import ViewIcon from "../../../public/Images/ViewIcon.png"
+import ViewIcon from "/Images/ViewIcon.png"
 
 export default function AssetsTracker() {
   const dispatch = useDispatch();
@@ -286,7 +286,7 @@ export default function AssetsTracker() {
           />
           <div className="d-flex gap-2">
             <Button variant="outlined"
-              sx={{ color: "#0058aa", fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
+              sx={{ fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
               onClick={handleRefresh}
             >
               {t("Refresh")}

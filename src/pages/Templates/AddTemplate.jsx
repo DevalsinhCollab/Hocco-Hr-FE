@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createTemplateForHtml, getTemplateById, updateTemplate } from "../../features/TemplateDetailSlice";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import AddTemplateIcon from "../../../public/Images/AddTemplate.png"
+import AddTemplateIcon from "/Images/AddTemplate.png"
 import JoditEditor from "jodit-react";
 
 // old

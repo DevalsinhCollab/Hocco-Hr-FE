@@ -9,7 +9,7 @@ import {
   getAllDistDocuments,
 } from "../../features/DistributorDocumentSlice";
 import DocumentFormDialog from "./DocumentFormDialog";
-import ViewIcon from "../../../public/Images/ViewIcon.png"
+import ViewIcon from "/Images/ViewIcon.png"
 import { useTranslation } from "react-i18next";
 
 export default function DistributorDocuments() {

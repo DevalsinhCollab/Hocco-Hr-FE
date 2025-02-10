@@ -5,10 +5,10 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { titleArray } from "../../utils/utils";
-import LanguageIcon from "../../../public/Images/language.png"
+import LanguageIcon from "/Images/language.png"
 import { Button } from "@mui/material";
 import SwitchCompany from "../Modal/SwitchCompany";
-import SidebarLogo from "../../../public/Images/Sidebar.png"
+import SidebarLogo from "/Images/Sidebar.png"
 
 const Navbar = (props) => {
   const { toggleNavbar } = props;

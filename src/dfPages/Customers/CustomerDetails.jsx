@@ -4,7 +4,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Grid, Typog
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import CustomerDetail from "../../../public/Images/CustomerDetail.png"
+import CustomerDetail from "/Images/CustomerDetail.png"
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getCustomerById } from "../../features/customerDetailSlice";
 
@@ -45,7 +45,7 @@ const CustomerDetails = () => {
                 </div>
                 <div className="d-flex gap-2">
                     <Button variant="outlined"
-                        sx={{ color: "#0058aa", fontWeight: "bold", border: "2px solid", color: "#c20b3b", marginRight: "1rem" }}
+                        sx={{ fontWeight: "bold", border: "2px solid", color: "#c20b3b", marginRight: "1rem" }}
                     >
                         <DeleteIcon sx={{ marginRight: "0.5rem" }} /> Delete
                     </Button>

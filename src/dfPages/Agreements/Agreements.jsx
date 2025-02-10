@@ -14,7 +14,7 @@ import {
 } from "../../features/AssetTrackerSlice";
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import { Button, InputAdornment, TextField } from "@mui/material";
-import ViewIcon from "../../../public/Images/ViewIcon.png"
+import ViewIcon from "/Images/ViewIcon.png"
 import SearchIcon from '@mui/icons-material/Search';
 
 export default function Agreements() {

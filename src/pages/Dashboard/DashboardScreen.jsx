@@ -3,14 +3,14 @@ import DashCard from "../../components/DashCard/DashCard";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { dfDashboard, disDashboard, getDashboardCount } from "../../features/dashboardSlice";
-import EmployeeIcon from "../../../public/Images/Employee.png"
-import DocumentIcon from "../../../public/Images/Document.png"
-import SignedIcon from "../../../public/Images/Signed.png"
-import UnsignedIcon from "../../../public/Images/Unsigned.png"
-import CompletedIcon from "../../../public/Images/Completed.png"
-import DfMasterIcon from "../../../public/Images/Df_master.png"
-import AgreementIcon from "../../../public/Images/Sent_agreement.png"
-import CustomerIcon from "../../../public/Images/Customers.png"
+import EmployeeIcon from "/Images/Employee.png"
+import DocumentIcon from "/Images/Document.png"
+import SignedIcon from "/Images/Signed.png"
+import UnsignedIcon from "/Images/Unsigned.png"
+import CompletedIcon from "/Images/Completed.png"
+import DfMasterIcon from "/Images/Df_master.png"
+import AgreementIcon from "/Images/Sent_agreement.png"
+import CustomerIcon from "/Images/Customers.png"
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";

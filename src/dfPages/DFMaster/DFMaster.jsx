@@ -23,7 +23,7 @@ import { Button, InputAdornment, TextField } from "@mui/material";
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-import EditIcon from "../../../public/Images/EditIcon.png"
+import EditIcon from "/Images/EditIcon.png"
 import SearchIcon from '@mui/icons-material/Search';
 
 export default function DFMaster(props) {
@@ -234,7 +234,7 @@ export default function DFMaster(props) {
             </Button>
 
             <Button variant="outlined"
-              sx={{ color: "#0058aa", fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
+              sx={{ fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
               onClick={downloadFile}
             >
               <UploadOutlinedIcon /> {t("Sample")}

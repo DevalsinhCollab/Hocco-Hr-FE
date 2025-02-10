@@ -18,8 +18,8 @@ import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { Button, InputAdornment, TextField } from "@mui/material";
-import EditIcon from "../../../public/Images/EditIcon.png"
-import ViewIcon from "../../../public/Images/ViewIcon.png"
+import EditIcon from "/Images/EditIcon.png"
+import ViewIcon from "/Images/ViewIcon.png"
 import { useNavigate } from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from "react-i18next";
@@ -204,7 +204,7 @@ export default function Customers() {
             </Button>
 
             <Button variant="outlined"
-              sx={{ color: "#0058aa", fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
+              sx={{ fontWeight: "bold", border: "2px solid", color: "#c20b3b" }}
               onClick={downloadFile}
             >
               <UploadOutlinedIcon /> {t("Sample")}

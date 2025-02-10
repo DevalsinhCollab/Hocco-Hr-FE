@@ -193,7 +193,41 @@ export default function AgreementFormDialog(props) {
                     let showData = "";
                     showData = getEmpData();
 
-                    let dbKey = field
+                    const replacementMap = {
+                      "{Designation}": "{designation}",
+                      "{Salary}": "{salary}",
+                      "{Salary_PA}": "{salaryPa}",
+                      "{Basic_Salary}": "{basicSalary}",
+                      "{Basic_Salary_PA}": "{basicSalaryPa}",
+                      "{Allowances}": "{allowances}",
+                      "{Allowances_PA}": "{allowancesPa}",
+                      "{Education_Allowance}": "{educationAllowance}",
+                      "{Education_Allowance_PA}": "{educationAllowancePa}",
+                      "{Attendance_Allowance}": "{attendanceAllowance}",
+                      "{Attendance_Allowance_PA}": "{attendanceAllowancePa}",
+                      "{HRA}": "{hra}",
+                      "{HRA_PA}": "{hraPa}",
+                      "{Monthly_Bonus}": "{monthlyBonus}",
+                      "{Monthly_Bonus_PA}": "{monthlyBonusPa}",
+                      "{Production_Incentive}": "{productionIncentive}",
+                      "{Production_Incentive_PA}": "{productionIncentivePa}",
+                      "{Company_Contribution}": "{companyContribution}",
+                      "{Company_Contribution_PA}": "{companyContributionPa}",
+                      "{Provident_Fund}": "{providentFund}",
+                      "{Provident_Fund_PA}": "{providentFundPa}",
+                      "{Employee_State_Insurance_Corporation}": "{employeeStateInsuranceCorporation}",
+                      "{Employee_State_Insurance_Corporation_PA}": "{employeeStateInsuranceCorporationPa}",
+                      "{Bonus_Exgratia}": "{bonusExgratia}",
+                      "{Bonus_Exgratia_PA}": "{bonusExgratiaPa}",
+                      "{Variable_Pay}": "{variablePay}",
+                      "{Variable_Pay_PA}": "{variablePayPa}",
+                      "{Total_CTC}": "{totalCTC}",
+                      "{Total_CTC_PA}": "{totalCTCPa}",
+                      "{Residential_Address}": "{residentialAddress}",
+                      "{Notice_Period}": "{noticePeriod}",
+                    };
+
+                    let dbKey = replacementMap[field] ? replacementMap[field] : field
 
                     if (dbKey) {
                       let rbDBKey = dbKey.replace("{", "").replace("}", "");

@@ -8,10 +8,10 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { getCompanies, getCompanyById } from "../../features/CompanyDetailSlice";
 import { updateUser } from "../../features/authDetailsSlice";
 import { getDashboardCount } from "../../features/dashboardSlice";
-import Logo from "../../../public/Images/logo.png";
-import Logosmall from "../../../public/Images/logo_small.png";
-import CompaniesLogo from "../../../public/Images/Companies.png"
-import LogoutLogo from "../../../public/Images/logout.png"
+import Logo from "/Images/logo.png";
+import Logosmall from "/Images/logo_small.png";
+import CompaniesLogo from "/Images/Companies.png"
+import LogoutLogo from "/Images/logout.png"
 import { companyNameArray } from "../../utils/utils";
 
 const Sidebar = (props) => {
