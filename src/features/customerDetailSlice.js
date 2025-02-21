@@ -32,23 +32,6 @@ export const getAllCustomer = createAsyncThunk(
   }
 );
 
-export const updateCusAgree = createAsyncThunk(
-  "updateCusAgree",
-  async (data, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_API}/auth/updateuseragreement/${
-          data[1]._id
-        }`,
-        data
-      );
-      return response["data"];
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
-
 export const addUser = createAsyncThunk(
   "addUser",
   async (data, { rejectWithValue }) => {
@@ -286,19 +269,6 @@ export const customerDetails = createSlice({
       state.loading = false;
     },
     [getAllCustomer.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [updateCusAgree.pending]: (state) => {
-      state.loading = true;
-    },
-    [updateCusAgree.fulfilled]: (state, action) => {
-      state.customers = state.customers.map((ele) =>
-        ele.id === action.payload._id ? action.payload : ele
-      );
-      state.loading = false;
-    },
-    [updateCusAgree.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

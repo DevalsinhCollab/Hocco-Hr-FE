@@ -33,7 +33,7 @@ export const sendAgreementToEmp = createAsyncThunk(
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_API
-        }/document/createSignAgreement`,
+        }/document/createSignAgreementForHr`,
         data
       );
       return response.data;

@@ -396,7 +396,7 @@ export default function AssetsTracker() {
         oldCustomerId={oldCustomerId}
       />
 
-      <ViewPDF showModal={showModal} setShowModal={setShowModal} />
+      {/* <ViewPDF showModal={showModal} setShowModal={setShowModal} /> */}
       <AssetTrackerInfoModal
         setShowModal={setDataPopup}
         showModal={dataPopup}

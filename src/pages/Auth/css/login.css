@@ -1,0 +1,75 @@
+.loginBox {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+}
+.loginImgBox {
+    width: 30%;
+    background: rgba(128, 0, 128, 0.829) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginExtraBox {
+    width: 70%;
+}
+.loginData {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20vw;
+}
+.loginForm .emailInput {
+    width: 40vw;
+}
+
+.btn5{
+    box-shadow: none !important;
+    border: 1px solid rgba(128, 128, 128, 0.301) !important;
+    padding: 1px !important;
+}
+
+.btn5:hover{
+    box-shadow: none !important;
+    border: 1px solid black !important;
+    padding: 1px !important;
+    color: black !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn4{
+    color: white !important;
+    background-color: rgba(128, 0, 128, 0.699) !important;
+    padding: 6px;
+    transition: all 0.3s;
+}
+.btn4:hover{
+    background-color: rgba(128, 0, 128, 0.699) !important;
+    color: white;
+}
+
+.show_pass i {
+    font-size: 15px;
+}
+
+.sign{
+    color: rgba(128, 0, 128, 0.699) !important;
+    text-decoration: none;
+}
+
+@media (max-width:1000px) {
+    .loginForm .emailInput {
+        width: 90vw;
+    }
+    .loginImgBox {
+        display: none;
+    }
+    .loginExtraBox {
+        width: 100%;
+    }
+}

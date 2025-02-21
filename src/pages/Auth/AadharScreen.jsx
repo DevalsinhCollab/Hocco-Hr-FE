@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-// import "./css/login.css";
+import "./css/login.css";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createAadharData } from "../../features/authDetailsSlice";
@@ -204,9 +204,6 @@ export default function AadharScreen() {
   return (
     <>
       <div className="loginBox">
-        {/* <div className="loginImgBox">
-          <img src="./Images/graphic3.svg" alt="svg" className="p-4" />
-        </div> */}
         <div className="loginExtraBox w-100">
           <div className="loginData">
             <div className="">

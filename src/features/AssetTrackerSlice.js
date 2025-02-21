@@ -102,36 +102,6 @@ export const sendAgreement = createAsyncThunk(
   }
 );
 
-export const getAllUnSignAgreement = createAsyncThunk(
-  "getAllUnSignAgreement",
-  async (data, { rejectWithValue }) => {
-    try {
-      let allAgreements = [];
-      let skip = 0;
-      const limit = 10;
-      let total = 0;
-
-      do {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_API
-          }/signAgreement/getAllUnSignAgreement`,
-          { params: { skip, limit } }
-        );
-
-        const { data, total: newTotal } = response.data;
-
-        allAgreements = [...allAgreements, ...data];
-        skip += limit;
-        total = newTotal;
-      } while (allAgreements.length < total);
-
-      return allAgreements;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
-
 export const getAllAgreements = createAsyncThunk(
   "getAllAgreements",
   async (data, { rejectWithValue }) => {
